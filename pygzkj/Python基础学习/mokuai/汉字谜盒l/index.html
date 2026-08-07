@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汉字谜盒</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <!-- 左侧会话列表 -->
+    <aside class="sidebar-left">
+        <div class="sidebar-title">✨ 汉字谜盒</div>
+        <button class="new-game-btn" id="newSessionBtn">🖊 新建游戏</button>
+        <div class="game-record-text">📋 会话记录</div>
+        <ul class="session-list" id="sessionList">
+            <!-- JS 动态渲染 -->
+        </ul>
+    </aside>
+
+    <!-- 中间主会话区域 -->
+    <main class="main-panel">
+        <div class="main-header">
+            ✨ 汉字谜盒
+            <span class="session-name" id="sessionName">— 选择一个会话或新建</span>
+        </div>
+        <div class="chat-area" id="chatArea">
+            <div class="empty-hint">👋 欢迎来到汉字谜盒！<br>点击左侧「新建游戏」开始猜字谜吧～</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="msgInput" placeholder="输入你的答案..." disabled autocomplete="off">
+            <button id="sendBtn" disabled>发送</button>
+        </div>
+    </main>
+
+    <!-- 右侧游戏简介 -->
+    <aside class="sidebar-right">
+        <div class="right-header">✨ 游戏简介</div>
+        <div class="intro-content">
+            <p>汉字谜盒 是一款基于人工智能的字谜互动游戏，专为汉字爱好者设计。在这里，你将与AI机器人进行有趣的猜字挑战！</p>
+
+            <div class="block-title">🎭 核心玩法</div>
+            <p>AI会随机出一道经典字谜（如"一口咬掉牛尾巴"），你需要根据谜面提示猜出对应的汉字，AI会根据你的回答给出相应的提示，并给出最终的答案。</p>
+
+            <div class="block-title">✨ 特色功能</div>
+            <ul>
+                <li><b>智能判题：</b>AI精准判断你的答案是否正确，答对即获即时夸奖</li>
+                <li><b>贴心提示：</b>猜错时提供线索引导，不会直接透露答案</li>
+                <li><b>无限挑战：</b>每次出题完全随机，永不重复</li>
+                <li><b>会话记忆：</b>游戏记录自动保存，随时回顾精彩对局</li>
+            </ul>
+
+            <div class="block-title">🎀 适合人群</div>
+            <ul>
+                <li>汉字文化爱好者</li>
+                <li>语文学习辅助工具</li>
+                <li>课堂教学演示素材</li>
+                <li>休闲娱乐解谜玩家</li>
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
