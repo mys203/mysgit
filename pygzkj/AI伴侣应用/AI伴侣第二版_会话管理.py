@@ -107,10 +107,12 @@ if promt:
    summesay=""
    response_message=st.empty()
    for check in response:
-       if check.choices[0].delta.content is not None:
-           content=check.choices[0].delta.content
-           summesay+=content
-           response_message.chat_message("assistant").write(summesay)
+        if check.choices[0].delta.content is not None:
+             content=check.choices[0].delta.content
+             summesay+=content
+             response_message.chat_message("assistant").write(summesay)
+             # st.chat_message(check["assistant"]).write(content)
+
     #存储用户和ai的话
    st.session_state.message.append({"role": "user", "content": promt})
    st.session_state.message.append({"role":"assistant","content":summesay})
