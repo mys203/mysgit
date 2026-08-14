@@ -25,5 +25,5 @@ json_str = [
     "gender":"男"
 }
 ]
-O= json.load(json_str,ensure_ascii=False)
+O= json.dump(json_str,ensure_ascii=False)
 print(O)
