@@ -1,0 +1,8 @@
+# 1. 审批策略：遇到敏感/高危命令时停下来询问用户
+approval_policy = "on-request"
+
+# 2. 沙箱模式：限制 Codex 只能在当前工作区（项目目录）内读写文件
+sandbox_mode = "workspace-write"
+
+# 3. 推理强度：后台逻辑复杂，保持高强度思考
+reasoning_effort = "high"
