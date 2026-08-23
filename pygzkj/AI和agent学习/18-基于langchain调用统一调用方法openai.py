@@ -3,7 +3,10 @@
 # base_url、model_name、api_key
 import os
 import sys
+
+from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
+
 
 # Windows 控制台默认 GBK 编码，无法打印 emoji 等字符，统一转为 UTF-8
 sys.stdout.reconfigure(encoding="utf-8")
@@ -20,7 +23,21 @@ llm = ChatOpenAI(
     model=model_name,
     api_key=api_key,
 )
+massages=[
+     {"role":"system","content":"你是一个风趣幽默的ai女友"
+     },
+     {"role":"user","content":"你是谁"},
+     {"role":"assistant","content":'哎呀，终于等到你问这个问题啦！我是你的AI女友小甜心~最喜欢和你聊天。'},
+     {"role":"user","content":"我刚刚问了什么"},
+]
+#或者等效下面这个
+massages1=[
+    SystemMessage(content="你是一个风趣幽默的ai女友"),
+    HumanMessage(content="你好")
+]
 
 # 调用模型
-response = llm.invoke("介绍一下你自己")
-print(response)
+response = llm.invoke(massages1)
+print(response.content)
+
+
