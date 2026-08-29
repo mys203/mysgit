@@ -1,6 +1,4 @@
-from os import name
-
-from fastapi import FastAPI
+from fastapi import FastAPI, Path
 
 app = FastAPI()
 
@@ -11,8 +9,18 @@ async def root():
 
 
 @app.get("/hello")
-async def root():
+async def hello():
     return {"message": "神了"}
+
 @app.get("/hello/{id}/{name}")
-async def hello(id: int, name: str):
-    return {"id":id,"name":name,"message":f"神了，id是{id}，名字是{name}"}
+async def hello_by_id(
+    id: int,
+    name: str = Path(..., min_length=2, max_length=10),
+):
+    return {"id": id, "name": name, "message": f"神了，id是{id}，名字是{name}"}
+
+@app.get("/hello/{name}")
+async def hello_by_name(
+    name: str = Path(..., min_length=2, max_length=10),
+):
+    return {"name": name, "message": f"神了，名字是{name}"}
