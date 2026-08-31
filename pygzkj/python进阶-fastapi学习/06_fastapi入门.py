@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+#启动 uvicorn 文件名:app --reload
 #创建FastAPI实例
 app = FastAPI()
 #定义api接口
