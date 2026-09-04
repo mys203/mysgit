@@ -25,3 +25,16 @@ export function getNewsList(params = {}) {
     params
   })
 }
+
+/**
+ * 获取新闻详情（后端会同时累加一次浏览量）
+ * @param {Object} params 查询参数 { id: 新闻ID }
+ * @returns {Promise<Object>} { id, title, content, image, author, publishTime, categoryId, views, relater }
+ */
+export function getNewsDetail(params = {}) {
+  return request({
+    url: '/news/detail',
+    method: 'get',
+    params
+  })
+}

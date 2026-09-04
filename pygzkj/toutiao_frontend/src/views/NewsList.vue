@@ -10,6 +10,9 @@ const props = defineProps({
   }
 })
 
+// 点击某条新闻时，向父组件（App.vue）抛出该条新闻
+const emit = defineEmits(['select'])
+
 const list = ref([])
 const loading = ref(false)
 const error = ref('')
@@ -67,7 +70,12 @@ watch(() => props.category?.id, fetchList, { immediate: true })
 
     <!-- 新闻列表 -->
     <div v-else class="news-items">
-      <article v-for="item in list" :key="item.id" class="news-item">
+      <article
+        v-for="item in list"
+        :key="item.id"
+        class="news-item"
+        @click="emit('select', item)"
+      >
         <img
           v-if="item.image"
           class="news-img"
@@ -83,6 +91,7 @@ watch(() => props.category?.id, fetchList, { immediate: true })
             <span v-if="item.publish_time" class="meta-time">{{ item.publish_time }}</span>
           </div>
         </div>
+        <span class="news-arrow" aria-hidden="true">›</span>
       </article>
     </div>
   </section>
@@ -118,11 +127,19 @@ watch(() => props.category?.id, fetchList, { immediate: true })
 
 .news-item {
   display: flex;
+  align-items: center;
   gap: 14px;
   background: #fff;
   border-radius: 12px;
   padding: 14px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.news-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .news-img {
@@ -135,7 +152,15 @@ watch(() => props.category?.id, fetchList, { immediate: true })
 }
 
 .news-body {
+  flex: 1;
   min-width: 0;
+}
+
+.news-arrow {
+  flex-shrink: 0;
+  font-size: 24px;
+  color: #c9cdd4;
+  line-height: 1;
 }
 
 .news-title {

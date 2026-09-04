@@ -1,5 +1,5 @@
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.db_config import get_db
@@ -37,3 +37,39 @@ async def get_list(
             "List": news_list,
         }
     }
+
+
+@router.get("/detail")
+async def get_news_detail(
+        news_id: int = Query(...,alias="id"),
+        db: AsyncSession = Depends(get_db)
+):
+    #第三轮编写，导入新闻内容数据让用户查看，并且浏览量加1，因为模型类在第二轮的时候已经编写所以可以直接用它做数据库操作。
+    news_detail = await news.get_news_detail(db, news_id)
+    if not news_detail:
+        raise HTTPException(status_code=404,detail="输入的数据id不存在")#如果用户输入的错误或者没有这个id就
+
+    view_res = await news.increase_news_views(db, news_id)
+    if not view_res:
+        raise HTTPException(status_code=404,detail="输入的数据id不存在")
+
+    relate_news = await news.get_related_news(db, news_detail.id, news_detail.category_id)
+    if not view_res:
+        raise HTTPException(status_code=404, detail="输入的数据id不存在")
+    return {
+        "code": 200,
+        "msg": "success",
+        "data": {
+            "id": news_id,
+            "title": news_detail.title,
+            "content":news_detail.content,
+            "image":news_detail.image,
+            "author":news_detail.author,
+            "publishTime":news_detail.publish_time,
+            "categoryId":news_detail.category_id,
+            "views":news_detail.views,
+            "relater": relate_news
+        }
+    }
+
+

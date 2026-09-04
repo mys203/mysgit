@@ -2,20 +2,35 @@
 import { ref } from 'vue'
 import NewsCategories from './views/NewsCategories.vue'
 import NewsList from './views/NewsList.vue'
+import NewsDetail from './views/NewsDetail.vue'
 
 // 当前选中的分类
 const activeCategory = ref(null)
+// 当前选中的新闻（非空时显示详情页）
+const selectedNews = ref(null)
 </script>
 
 <template>
   <div class="app">
     <header class="app-header">
-      <h1>头条新闻分类</h1>
-      <p class="app-subtitle">News Categories</p>
+      <h1>头条新闻</h1>
+      <p class="app-subtitle">Toutiao News</p>
     </header>
     <main class="app-main">
-      <NewsCategories @select="activeCategory = $event" />
-      <NewsList :category="activeCategory" />
+      <!-- 详情页 -->
+      <NewsDetail
+        v-if="selectedNews"
+        :news="selectedNews"
+        @back="selectedNews = null"
+      />
+      <!-- 分类 + 列表页 -->
+      <template v-else>
+        <NewsCategories @select="activeCategory = $event" />
+        <NewsList
+          :category="activeCategory"
+          @select="selectedNews = $event"
+        />
+      </template>
     </main>
   </div>
 </template>

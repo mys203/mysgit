@@ -33,7 +33,6 @@ class Category(Base):
 #第二轮设置模型类
 class News(Base):
     __tablename__ = "news"
-
     # 创建索引：提升查询速度
     __table_args__ = (
         Index('fk_news_category_idx', 'category_id'),
