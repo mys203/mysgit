@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 
-from routers import news
+from routers import news, users
+from schemas.exception_handlers import register_exception_handlers
 
 app = FastAPI()
-
+# 注册异常处理器
+register_exception_handlers(app)
 # 添加CORS中间件允许前端跨域访问（Vite 开发服务器默认端口 5173）
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
@@ -17,6 +19,7 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
 # 接口实现流程
 # 1.模块化路由
 # 2.定义模型类 —> 数据库表
@@ -25,3 +28,5 @@ async def root():
 
 #把路由的news挂载（注册）过来(也就是把别的文件搞过来)
 app.include_router(news.router)
+
+app.include_router(users.router)

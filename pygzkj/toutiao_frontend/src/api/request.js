@@ -34,7 +34,11 @@ request.interceptors.response.use(
     let msg = '网络异常，请稍后重试'
     if (error.response) {
       const status = error.response.status
-      if (status === 404) {
+      const data = error.response.data
+      // 优先展示后端返回的业务错误信息（异常处理器返回 { message }，兼容 { detail } / { msg }）
+      if (data && (data.message || data.detail || data.msg)) {
+        msg = data.message || data.detail || data.msg
+      } else if (status === 404) {
         msg = '接口不存在 (404)'
       } else if (status >= 500) {
         msg = '服务器错误，请稍后重试'

@@ -37,3 +37,7 @@ async def get_related_news(db:AsyncSession,news_id:int,category_id:int,limit: in
     stmt = select(News).where(News.category_id == category_id).order_by(News.views.desc(),News.publish_time.desc()).limit(limit)
     results = await db.execute(stmt)
     return results.scalars().all()
+
+
+
+#现在新闻操作基本完成，现在要去做用户登录、查询什么相关的数据库操作了。
