@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getToken, clearAuth } from '../utils/auth'
 
 // 统一封装的 axios 实例
 const request = axios.create({
@@ -9,8 +10,11 @@ const request = axios.create({
 // 请求拦截器：可在此统一添加 token、公共参数等
 request.interceptors.request.use(
   (config) => {
-    // 示例：const token = localStorage.getItem('token')
-    // if (token) config.headers.Authorization = `Bearer ${token}`
+    // 登录/注册成功后 token 已存入 localStorage，这里统一注入到请求头
+    const token = getToken()
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
     return config
   },
   (error) => Promise.reject(error)
@@ -35,8 +39,12 @@ request.interceptors.response.use(
     if (error.response) {
       const status = error.response.status
       const data = error.response.data
-      // 优先展示后端返回的业务错误信息（异常处理器返回 { message }，兼容 { detail } / { msg }）
-      if (data && (data.message || data.detail || data.msg)) {
+      // 401 未授权 / token 失效：清除本地登录态，引导用户重新登录
+      if (status === 401) {
+        clearAuth()
+        msg = (data && (data.message || data.detail || data.msg)) || '登录已过期，请重新登录'
+      } else if (data && (data.message || data.detail || data.msg)) {
+        // 优先展示后端返回的业务错误信息（异常处理器返回 { message }，兼容 { detail } / { msg }）
         msg = data.message || data.detail || data.msg
       } else if (status === 404) {
         msg = '接口不存在 (404)'

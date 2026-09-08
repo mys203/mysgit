@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { loginUser, registerUser } from '../api/users'
+import { loginUser, registerUser, getUserInfo } from '../api/users'
+import { authState, setAuth, clearAuth } from '../utils/auth'
 
 // 当前模式：login 登录 / register 注册
 const mode = ref('login')
@@ -12,11 +13,15 @@ const form = ref({
 })
 
 const loading = ref(false)
+const refreshing = ref(false)
 const error = ref('')
-// 成功后的返回数据 { token, userinfo }
-const result = ref(null)
 
 const isLogin = computed(() => mode.value === 'login')
+// 已登录状态：token 存在即视为已登录
+const isLoggedIn = computed(() => !!authState.token)
+// 当前用户信息与令牌（登录后持久化到 localStorage）
+const userinfo = computed(() => authState.userinfo)
+const token = computed(() => authState.token)
 
 // 用户名和密码都非空时才允许提交
 const canSubmit = computed(
@@ -58,7 +63,9 @@ async function handleSubmit() {
       password: form.value.password
     }
     // 响应拦截器已剥掉 code/msg/data，这里拿到的是后端 data 内容 { token, userinfo }
-    result.value = isLogin.value ? await loginUser(payload) : await registerUser(payload)
+    const data = isLogin.value ? await loginUser(payload) : await registerUser(payload)
+    // 持久化 token 与用户信息，后续请求会自动带上 Authorization 头
+    setAuth(data.token, data.userinfo)
   } catch (e) {
     error.value = e.message || '操作失败，请稍后重试'
   } finally {
@@ -70,22 +77,36 @@ async function handleSubmit() {
 function switchMode(target) {
   mode.value = target
   form.value = { username: '', password: '', confirmPassword: '' }
-  result.value = null
   error.value = ''
 }
 
-// 成功后重置，方便继续操作
-function resetForm() {
-  form.value = { username: '', password: '', confirmPassword: '' }
-  result.value = null
+// 退出登录：清空本地 token，回到登录表单
+function handleLogout() {
+  clearAuth()
+  mode.value = 'login'
   error.value = ''
+}
+
+// 使用 token 重新获取最新用户信息（演示受保护的 /user/info 接口）
+async function refreshInfo() {
+  refreshing.value = true
+  error.value = ''
+  try {
+    const info = await getUserInfo()
+    // 用后端返回的最新信息更新本地（token 保持不变）
+    setAuth(authState.token, { ...authState.userinfo, ...info })
+  } catch (e) {
+    error.value = e.message || '获取用户信息失败'
+  } finally {
+    refreshing.value = false
+  }
 }
 </script>
 
 <template>
   <section class="user-auth">
     <!-- 登录 / 注册表单 -->
-    <div v-if="!result" class="auth-card">
+    <div v-if="!isLoggedIn" class="auth-card">
       <div class="card-head">
         <div class="logo">👤</div>
         <h2 class="card-title">{{ isLogin ? '欢迎回来' : '创建账号' }}</h2>
@@ -148,44 +169,56 @@ function resetForm() {
       </form>
     </div>
 
-    <!-- 成功 -->
+    <!-- 已登录：展示当前用户信息 -->
     <div v-else class="success-card">
       <img
         class="success-avatar"
-        :src="result.userinfo?.avatar"
-        :alt="result.userinfo?.username"
+        :src="userinfo?.avatar"
+        :alt="userinfo?.username"
       />
-      <h2 class="success-title">{{ isLogin ? '登录成功' : '注册成功' }} 🎉</h2>
-      <p class="success-welcome">欢迎你，{{ result.userinfo?.username }}</p>
+      <h2 class="success-title">欢迎回来 🎉</h2>
+      <p class="success-welcome">{{ userinfo?.username }}</p>
 
       <ul class="info-list">
         <li class="info-item">
           <span class="info-key">用户 ID</span>
-          <span class="info-val">{{ result.userinfo?.id }}</span>
+          <span class="info-val">{{ userinfo?.id }}</span>
         </li>
         <li class="info-item">
           <span class="info-key">用户名</span>
-          <span class="info-val">{{ result.userinfo?.username }}</span>
+          <span class="info-val">{{ userinfo?.username }}</span>
         </li>
-        <li v-if="result.userinfo?.gender" class="info-item">
+        <li v-if="userinfo?.nickname" class="info-item">
+          <span class="info-key">昵称</span>
+          <span class="info-val">{{ userinfo?.nickname }}</span>
+        </li>
+        <li v-if="userinfo?.gender" class="info-item">
           <span class="info-key">性别</span>
-          <span class="info-val">{{ genderLabel(result.userinfo?.gender) }}</span>
+          <span class="info-val">{{ genderLabel(userinfo?.gender) }}</span>
         </li>
-        <li v-if="result.userinfo?.phone_number" class="info-item">
+        <li v-if="userinfo?.phone_number" class="info-item">
           <span class="info-key">手机号</span>
-          <span class="info-val">{{ result.userinfo?.phone_number }}</span>
+          <span class="info-val">{{ userinfo?.phone_number }}</span>
         </li>
         <li class="info-item">
           <span class="info-key">个人简介</span>
-          <span class="info-val">{{ result.userinfo?.bio }}</span>
+          <span class="info-val">{{ userinfo?.bio }}</span>
         </li>
         <li class="info-item">
           <span class="info-key">访问令牌</span>
-          <span class="info-val token">{{ result.token }}</span>
+          <span class="info-val token">{{ token }}</span>
         </li>
       </ul>
 
-      <button class="submit-btn secondary" @click="resetForm">继续操作</button>
+      <div v-if="error" class="error-box">{{ error }}</div>
+
+      <div class="action-row">
+        <button class="submit-btn" :disabled="refreshing" @click="refreshInfo">
+          <span v-if="refreshing" class="btn-spinner" aria-label="刷新中"></span>
+          <span v-else>刷新个人信息</span>
+        </button>
+        <button class="submit-btn secondary" @click="handleLogout">退出登录</button>
+      </div>
     </div>
   </section>
 </template>
@@ -347,6 +380,16 @@ function resetForm() {
   background: #fff;
   color: #e02e24;
   border: 1px solid #e02e24;
+}
+
+.action-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.action-row .submit-btn {
+  margin-top: 0;
 }
 
 .btn-spinner {

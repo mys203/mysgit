@@ -27,3 +27,14 @@ export function loginUser(data) {
     data
   })
 }
+
+/**
+ * 获取当前登录用户信息（携带 token 的受保护接口）
+ * @returns {Promise<Object>} 后端 data 部分：用户信息对象
+ */
+export function getUserInfo() {
+  return request({
+    url: '/user/info',
+    method: 'get'
+  })
+}

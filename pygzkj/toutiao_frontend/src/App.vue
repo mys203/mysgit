@@ -4,6 +4,7 @@ import NewsCategories from './views/NewsCategories.vue'
 import NewsList from './views/NewsList.vue'
 import NewsDetail from './views/NewsDetail.vue'
 import UserAuth from './views/UserAuth.vue'
+import UserAvatar from './components/UserAvatar.vue'
 
 // 当前选中的分类
 const activeCategory = ref(null)
@@ -24,6 +25,9 @@ const moduleSubtitle = computed(() =>
 <template>
   <div class="app">
     <header class="app-header">
+      <div class="header-avatar">
+        <UserAvatar @login="currentModule = 'user'" />
+      </div>
       <div class="header-brand">
         <h1>{{ moduleTitle }}</h1>
         <p class="app-subtitle">{{ moduleSubtitle }}</p>
@@ -80,10 +84,18 @@ body {
 }
 
 .app-header {
+  position: relative;
   background: linear-gradient(135deg, #e02e24 0%, #ff5a3c 100%);
   color: #fff;
   padding: 40px 24px 28px;
   text-align: center;
+}
+
+.header-avatar {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 10;
 }
 
 .header-brand h1 {

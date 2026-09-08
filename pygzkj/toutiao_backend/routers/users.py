@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header
 from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from joblib import numpy_pickle
@@ -21,12 +21,13 @@ async def register(user_date: UserRequest  , db: AsyncSession = Depends(get_db))
     if exist_username:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="输入的用户名已存在")
     user = await users.get_user_register(db, user_date)
+    token = await users.create_token(db, user.id)
 
     return {
         "code": 200,
         "msg": "register success",
         "data": {
-            "token": "用户的访问令牌",
+            "token": token,
             "userinfo":{
                 "id": user.id,
                 "username": user.username,
@@ -37,21 +38,56 @@ async def register(user_date: UserRequest  , db: AsyncSession = Depends(get_db))
     }
 
 @router.post("/login")
-async def login(user_date : UserRequest ,db: AsyncSession = Depends(get_db)):
-    user = await users.get_user_register(db, user_date)
+async def login(user_date: UserRequest, db: AsyncSession = Depends(get_db)):
+    # 登录逻辑:校验用户名密码 -> 生成token -> 响应
+    user = await users.authenticate_user(db, user_date.username, user_date.password)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="用户名或密码错误")
+
+    token = await users.create_token(db, user.id)
 
     return {
         "code": 200,
-        "msg": "register success",
+        "msg": "login success",
         "data": {
-            "token": "用户的访问令牌",
-            "userinfo":{
+            "token": token,
+            "userinfo": {
                 "id": user.id,
                 "username": user.username,
                 "bio": user.bio,
                 "avatar": user.avatar,
                 "gender": user.gender,
-                "phone_number": user.phone,
+                "phone": user.phone,
             }
+        }
     }
+
+#个人信息接口
+@router.get("/info")
+async def info(authorization: str = Header(None), db: AsyncSession = Depends(get_db)):
+    # 从请求头取出 token，前端统一通过 Authorization: Bearer <token> 携带
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="未登录或登录已过期")
+    token = authorization.replace("Bearer ", "").strip()
+
+    # 用 token 查用户，顺带校验是否过期
+    user = await users.get_user_token(db, token)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="未登录或登录已过期")
+
+    return {
+        "code": 200,
+        "msg": "info success",
+        "data": {
+            "id": user.id,
+            "username": user.username,
+            "nickname": user.nickname,
+            "avatar": user.avatar,
+            "gender": user.gender,
+            "bio": user.bio,
+        }
     }
+
+
+
+
