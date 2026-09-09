@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, security
 from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from joblib import numpy_pickle
@@ -7,7 +7,8 @@ from starlette import status
 
 from config.db_config import get_db
 from crud import users
-from schemas.users import UserRequest
+from models.users import User
+from schemas.users import UserRequest, UpdateRequest, UpdatePassword
 
 router = APIRouter(prefix="/api/user", tags=["users"])
 
@@ -89,5 +90,35 @@ async def info(authorization: str = Header(None), db: AsyncSession = Depends(get
     }
 
 
+@router.put("/update")
+async def update_date(user_date: UpdateRequest, db: AsyncSession = Depends(get_db)):
+    # 简单起见：前端把 username 放进请求体，这里直接调 update_user 完成更新
+    user = await users.update_user(db, user_date)
+    return {
+        "code": 200,
+        "msg": "update success",
+        "data": {
+            "phone": user.phone,
+            "nickname": user.nickname,
+            "avatar": user.avatar,
+            "gender": user.gender,
+            "bio": user.bio,
+        }
+    }
 
+@router.put("/password")
+async def update_password(user_date: UpdatePassword, db: AsyncSession = Depends(get_db)):
+    # 先根据用户名查出要改密码的用户
+    user = await users.get_user_name(db, user_date.username)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="用户不存在")
 
+    res_change_pwd = await users.change_password(db, user, user_date.old_password, user_date.new_password)
+    if not res_change_pwd:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="原密码错误")
+
+    return {
+        "code": 200,
+        "msg": "password success",
+        "data": None
+    }

@@ -38,3 +38,30 @@ export function getUserInfo() {
     method: 'get'
   })
 }
+
+/**
+ * 更新当前登录用户信息
+ * @param {Object} data 更新参数，username 必填，其余字段按需传入：
+ *   { username, nickname?, avatar?, gender?, bio?, phone? }
+ * @returns {Promise<{ phone, nickname, avatar, gender, bio }>} 后端 data 部分：更新后的字段
+ */
+export function updateUser(data) {
+  return request({
+    url: '/user/update',
+    method: 'put',
+    data
+  })
+}
+
+/**
+ * 修改当前登录用户密码
+ * @param {Object} data 修改参数 { username, old_password, new_password }
+ * @returns {Promise<null>} 后端 data 部分为 null，成功即代表修改完成
+ */
+export function changePassword(data) {
+  return request({
+    url: '/user/password',
+    method: 'put',
+    data
+  })
+}

@@ -2,10 +2,10 @@
 import uuid
 from datetime import datetime, timedelta
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.users import User, UserToken
-from schemas.users import UserRequest
+from schemas.users import UserRequest, UpdateRequest
 from utils import security
 
 
@@ -68,3 +68,32 @@ async def get_user_token( db:AsyncSession,token: str):
     return result.scalars().one_or_none()
 
 
+async def update_user(db: AsyncSession, users_date: UpdateRequest):
+    # 从请求体取出 username 确定要更新哪个用户
+    username = users_date.username
+    # 把 users_date 转成字典作为要更新的字段值，排除掉 username 本身
+    query = update(User).where(User.username == username).values(**users_date.model_dump(
+        # 只更新前端传了的字段，没传的保持原样
+        exclude_unset=True,
+        exclude_none=True,
+        exclude={"username"},
+    ))
+    result = await db.execute(query)
+    await db.commit()
+
+    # 获取更新后的用户，最终还是改了
+    update_after = await get_user_name(db, username)
+    return update_after
+
+
+async def change_password(db: AsyncSession, user:User,old_password: str,new_password: str):
+    #判断密码是否正确
+    if not security.verify_password(old_password, user.password):
+        return False
+    else:
+        hashed_password = security.get_password_hash(new_password)
+        user.password = hashed_password
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+        return True

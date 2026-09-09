@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { loginUser, registerUser, getUserInfo } from '../api/users'
+import { loginUser, registerUser, getUserInfo, updateUser, changePassword } from '../api/users'
 import { authState, setAuth, clearAuth } from '../utils/auth'
 
 // 当前模式：login 登录 / register 注册
@@ -16,12 +16,41 @@ const loading = ref(false)
 const refreshing = ref(false)
 const error = ref('')
 
+// 编辑资料相关状态
+const editing = ref(false)
+const updating = ref(false)
+const editForm = ref({
+  nickname: '',
+  avatar: '',
+  gender: 'unknown',
+  bio: '',
+  phone: ''
+})
+
 const isLogin = computed(() => mode.value === 'login')
 // 已登录状态：token 存在即视为已登录
 const isLoggedIn = computed(() => !!authState.token)
 // 当前用户信息与令牌（登录后持久化到 localStorage）
 const userinfo = computed(() => authState.userinfo)
 const token = computed(() => authState.token)
+
+// 修改密码相关状态
+const changingPwd = ref(false)
+const pwdUpdating = ref(false)
+const pwdSuccess = ref('')
+const pwdForm = ref({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: ''
+})
+
+// 三个密码框都非空时才允许提交修改
+const canSubmitPwd = computed(
+  () =>
+    pwdForm.value.oldPassword !== '' &&
+    pwdForm.value.newPassword !== '' &&
+    pwdForm.value.confirmPassword !== ''
+)
 
 // 用户名和密码都非空时才允许提交
 const canSubmit = computed(
@@ -99,6 +128,110 @@ async function refreshInfo() {
     error.value = e.message || '获取用户信息失败'
   } finally {
     refreshing.value = false
+  }
+}
+
+// 进入编辑模式：用当前用户信息预填表单
+function startEdit() {
+  const u = authState.userinfo || {}
+  editForm.value = {
+    nickname: u.nickname || '',
+    avatar: u.avatar || '',
+    gender: u.gender || 'unknown',
+    bio: u.bio || '',
+    phone: u.phone || ''
+  }
+  editing.value = true
+  error.value = ''
+}
+
+// 取消编辑，恢复展示模式
+function cancelEdit() {
+  editing.value = false
+  error.value = ''
+}
+
+// 提交修改：调用 /user/update，成功后合并返回字段并退出编辑
+async function submitUpdate() {
+  updating.value = true
+  error.value = ''
+  try {
+    // username 用于后端定位要更新的用户，必传
+    const payload = { username: authState.userinfo?.username }
+    const f = editForm.value
+    // 只提交用户实际填写的字段，未填写的字段后端会保持原样
+    if (f.nickname.trim()) payload.nickname = f.nickname.trim()
+    if (f.avatar.trim()) payload.avatar = f.avatar.trim()
+    if (f.bio.trim()) payload.bio = f.bio.trim()
+    if (f.phone.trim()) payload.phone = f.phone.trim()
+    if (f.gender) payload.gender = f.gender
+
+    const updated = await updateUser(payload)
+    // 用后端返回的最新字段合并到本地用户信息，token 保持不变
+    setAuth(authState.token, { ...authState.userinfo, ...updated })
+    editing.value = false
+  } catch (e) {
+    error.value = e.message || '更新失败，请稍后重试'
+  } finally {
+    updating.value = false
+  }
+}
+
+// 进入修改密码模式
+function startChangePwd() {
+  pwdForm.value = { oldPassword: '', newPassword: '', confirmPassword: '' }
+  pwdSuccess.value = ''
+  error.value = ''
+  changingPwd.value = true
+}
+
+// 取消修改密码
+function cancelChangePwd() {
+  changingPwd.value = false
+  pwdSuccess.value = ''
+  error.value = ''
+}
+
+// 提交修改密码：调用 /user/password，成功后提示并退出修改
+async function submitChangePwd() {
+  error.value = ''
+  pwdSuccess.value = ''
+  const f = pwdForm.value
+  if (!f.oldPassword) {
+    error.value = '请输入原密码'
+    return
+  }
+  if (!f.newPassword) {
+    error.value = '请输入新密码'
+    return
+  }
+  if (f.newPassword.length < 6) {
+    error.value = '新密码至少 6 位'
+    return
+  }
+  if (f.newPassword === f.oldPassword) {
+    error.value = '新密码不能与原密码相同'
+    return
+  }
+  if (f.newPassword !== f.confirmPassword) {
+    error.value = '两次输入的新密码不一致'
+    return
+  }
+
+  pwdUpdating.value = true
+  try {
+    // username 用于后端定位要改密码的用户，必传
+    await changePassword({
+      username: authState.userinfo?.username,
+      old_password: f.oldPassword,
+      new_password: f.newPassword
+    })
+    pwdSuccess.value = '密码修改成功'
+    changingPwd.value = false
+  } catch (e) {
+    error.value = e.message || '密码修改失败，请稍后重试'
+  } finally {
+    pwdUpdating.value = false
   }
 }
 </script>
@@ -179,7 +312,7 @@ async function refreshInfo() {
       <h2 class="success-title">欢迎回来 🎉</h2>
       <p class="success-welcome">{{ userinfo?.username }}</p>
 
-      <ul class="info-list">
+      <ul v-if="!editing && !changingPwd" class="info-list">
         <li class="info-item">
           <span class="info-key">用户 ID</span>
           <span class="info-val">{{ userinfo?.id }}</span>
@@ -196,9 +329,9 @@ async function refreshInfo() {
           <span class="info-key">性别</span>
           <span class="info-val">{{ genderLabel(userinfo?.gender) }}</span>
         </li>
-        <li v-if="userinfo?.phone_number" class="info-item">
+        <li v-if="userinfo?.phone" class="info-item">
           <span class="info-key">手机号</span>
-          <span class="info-val">{{ userinfo?.phone_number }}</span>
+          <span class="info-val">{{ userinfo?.phone }}</span>
         </li>
         <li class="info-item">
           <span class="info-key">个人简介</span>
@@ -210,13 +343,127 @@ async function refreshInfo() {
         </li>
       </ul>
 
-      <div v-if="error" class="error-box">{{ error }}</div>
+      <!-- 编辑资料表单 -->
+      <form v-else-if="editing" class="edit-form" @submit.prevent="submitUpdate">
+        <label class="field">
+          <span class="field-label">昵称</span>
+          <input
+            v-model="editForm.nickname"
+            class="field-input"
+            type="text"
+            placeholder="请输入昵称"
+            maxlength="50"
+          />
+        </label>
 
-      <div class="action-row">
+        <label class="field">
+          <span class="field-label">头像 URL</span>
+          <input
+            v-model="editForm.avatar"
+            class="field-input"
+            type="text"
+            placeholder="请输入头像图片地址"
+          />
+        </label>
+
+        <label class="field">
+          <span class="field-label">性别</span>
+          <select v-model="editForm.gender" class="field-input">
+            <option value="male">男</option>
+            <option value="female">女</option>
+            <option value="unknown">保密</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span class="field-label">手机号</span>
+          <input
+            v-model="editForm.phone"
+            class="field-input"
+            type="text"
+            placeholder="请输入手机号"
+            maxlength="20"
+          />
+        </label>
+
+        <label class="field">
+          <span class="field-label">个人简介</span>
+          <textarea
+            v-model="editForm.bio"
+            class="field-input bio-input"
+            placeholder="介绍一下自己吧~"
+            maxlength="500"
+          ></textarea>
+        </label>
+
+        <div v-if="error" class="error-box">{{ error }}</div>
+
+        <div class="action-row">
+          <button class="submit-btn" type="submit" :disabled="updating">
+            <span v-if="updating" class="btn-spinner" aria-label="保存中"></span>
+            <span v-else>保存修改</span>
+          </button>
+          <button class="submit-btn secondary" type="button" :disabled="updating" @click="cancelEdit">取消</button>
+        </div>
+      </form>
+
+      <!-- 修改密码表单 -->
+      <form v-else class="edit-form" @submit.prevent="submitChangePwd">
+        <label class="field">
+          <span class="field-label">原密码</span>
+          <input
+            v-model="pwdForm.oldPassword"
+            class="field-input"
+            type="password"
+            placeholder="请输入原密码"
+            autocomplete="current-password"
+          />
+        </label>
+
+        <label class="field">
+          <span class="field-label">新密码</span>
+          <input
+            v-model="pwdForm.newPassword"
+            class="field-input"
+            type="password"
+            placeholder="请输入新密码（至少 6 位）"
+            autocomplete="new-password"
+          />
+        </label>
+
+        <label class="field">
+          <span class="field-label">确认新密码</span>
+          <input
+            v-model="pwdForm.confirmPassword"
+            class="field-input"
+            type="password"
+            placeholder="请再次输入新密码"
+            autocomplete="new-password"
+          />
+        </label>
+
+        <div v-if="error" class="error-box">{{ error }}</div>
+
+        <div class="action-row">
+          <button class="submit-btn" type="submit" :disabled="!canSubmitPwd || pwdUpdating">
+            <span v-if="pwdUpdating" class="btn-spinner" aria-label="提交中"></span>
+            <span v-else>确认修改</span>
+          </button>
+          <button class="submit-btn secondary" type="button" :disabled="pwdUpdating" @click="cancelChangePwd">取消</button>
+        </div>
+      </form>
+
+      <div v-if="!editing && !changingPwd && pwdSuccess" class="success-box">{{ pwdSuccess }}</div>
+
+      <div v-if="!editing && !changingPwd && error" class="error-box">{{ error }}</div>
+
+      <div v-if="!editing && !changingPwd" class="action-row">
         <button class="submit-btn" :disabled="refreshing" @click="refreshInfo">
           <span v-if="refreshing" class="btn-spinner" aria-label="刷新中"></span>
           <span v-else>刷新个人信息</span>
         </button>
+        <button class="submit-btn secondary" @click="startEdit">编辑资料</button>
+        <button class="submit-btn secondary" @click="startChangePwd">修改密码</button>
         <button class="submit-btn secondary" @click="handleLogout">退出登录</button>
       </div>
     </div>
@@ -302,6 +549,21 @@ async function refreshInfo() {
   margin-top: 20px;
 }
 
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.bio-input {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
 .field {
   display: flex;
   flex-direction: column;
@@ -342,6 +604,16 @@ async function refreshInfo() {
   border-radius: 8px;
   background: #fff1f0;
   color: #e02e24;
+  font-size: 13px;
+}
+
+.success-box {
+  margin-top: 16px;
+  padding: 10px 14px;
+  border: 1px solid #d4f0d8;
+  border-radius: 8px;
+  background: #f0fbf2;
+  color: #1f8f3a;
   font-size: 13px;
 }
 
