@@ -26,6 +26,6 @@ class UpdatePassword(BaseModel):
     new_password: str
 
 def success_response(massage: str='Success!',date=None):
-    content = {"code":200,"msg":massage,date:date}
+    content = {"code":200,"msg":massage,"data":date}
     #把对象转换成json数据结构输出
     return JSONResponse(content=jsonable_encoder(content))

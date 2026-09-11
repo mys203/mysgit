@@ -17,6 +17,11 @@ async def get_user_name( db:AsyncSession,user_name : str):
     result= await db.execute(query)  #执行结果
     return result.scalars().one_or_none()   #有可能有，有可能没有所以用one_or_none
 
+async def get_user_date( db:AsyncSession,user_id : int):
+    query= select(User).where(User.id==user_id)
+    result= await db.execute(query)  #执行结果
+    return result.scalars().one_or_none()   #有可能有，有可能没有所以用one_or_none
+
 #创建用户的方法，得用passlib 用哈希算法加密密码
 async def get_user_register( db:AsyncSession,user_name : UserRequest):
     #导入utils的密码加密方法，加密密码
