@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import NewsCategories from './views/NewsCategories.vue'
 import NewsList from './views/NewsList.vue'
 import NewsDetail from './views/NewsDetail.vue'
+import FavoriteList from './views/FavoriteList.vue'
 import UserAuth from './views/UserAuth.vue'
 import UserAvatar from './components/UserAvatar.vue'
 
@@ -10,8 +11,14 @@ import UserAvatar from './components/UserAvatar.vue'
 const activeCategory = ref(null)
 // 当前选中的新闻（非空时显示详情页）
 const selectedNews = ref(null)
-// 当前模块：news 新闻 / user 用户注册
+// 当前模块：news 新闻 / favorite 我的收藏 / user 用户
 const currentModule = ref('news')
+
+// 切换模块：清空详情态，避免跨模块残留详情页
+function switchModule(m) {
+  currentModule.value = m
+  selectedNews.value = null
+}
 
 // 根据当前模块动态显示标题
 const moduleTitle = computed(() =>
@@ -35,11 +42,15 @@ const moduleSubtitle = computed(() =>
       <nav class="app-nav">
         <button
           :class="['nav-btn', { active: currentModule === 'news' }]"
-          @click="currentModule = 'news'"
+          @click="switchModule('news')"
         >📰 新闻</button>
         <button
+          :class="['nav-btn', { active: currentModule === 'favorite' }]"
+          @click="switchModule('favorite')"
+        >⭐ 收藏</button>
+        <button
           :class="['nav-btn', { active: currentModule === 'user' }]"
-          @click="currentModule = 'user'"
+          @click="switchModule('user')"
         >👤 用户</button>
       </nav>
     </header>
@@ -52,6 +63,7 @@ const moduleSubtitle = computed(() =>
           v-if="selectedNews"
           :news="selectedNews"
           @back="selectedNews = null"
+          @login="currentModule = 'user'"
         />
         <!-- 分类 + 列表页 -->
         <template v-else>
@@ -62,6 +74,17 @@ const moduleSubtitle = computed(() =>
           />
         </template>
       </template>
+      <!-- 收藏模块：我的收藏列表 -->
+      <template v-else-if="currentModule === 'favorite'">
+        <NewsDetail
+          v-if="selectedNews"
+          :news="selectedNews"
+          @back="selectedNews = null"
+          @login="switchModule('user')"
+        />
+        <FavoriteList v-else @select="selectedNews = $event" @login="switchModule('user')" />
+      </template>
+
       <!-- 用户模块：登录 / 注册 -->
       <UserAuth v-else />
     </main>

@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { getNewsDetail } from '../api/news'
+import { checkFavorite, addFavorite, removeFavorite } from '../api/favorite'
+import { authState } from '../utils/auth'
 
 const props = defineProps({
   // 从新闻列表点进来的那条新闻（至少包含 id）
@@ -10,7 +12,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['back'])
+const emit = defineEmits(['back', 'login'])
 
 // 详情数据
 const detail = ref(null)
@@ -18,6 +20,13 @@ const loading = ref(true)
 const error = ref('')
 // 当前展示的新闻 id（点击相关推荐后切换，默认用列表带进来的 id）
 const currentId = ref(props.news.id)
+
+// 收藏相关状态
+const isFavorite = ref(false)
+const favLoading = ref(false)
+const favError = ref('')
+// 是否已登录（token 存在即视为已登录）
+const isLoggedIn = computed(() => !!authState.token)
 
 // 相关推荐：后端按同分类热度取前 5，可能把当前这篇也算进去，这里过滤掉自己
 const relatedNews = computed(() =>
@@ -39,10 +48,51 @@ async function fetchDetail(id = currentId.value) {
   try {
     detail.value = await getNewsDetail({ id })
     currentId.value = id
+    // 详情加载完后再查收藏状态（不阻塞详情展示）
+    fetchFavorite(id)
   } catch (e) {
     error.value = e.message || '加载失败'
   } finally {
     loading.value = false
+  }
+}
+
+// 查询当前新闻是否已被收藏（未登录则跳过）
+async function fetchFavorite(id = currentId.value) {
+  isFavorite.value = false
+  favError.value = ''
+  if (!isLoggedIn.value) return
+  try {
+    const res = await checkFavorite(id)
+    isFavorite.value = !!res.isFavorite
+  } catch (e) {
+    // 检查失败不打断阅读，保持未收藏状态
+    isFavorite.value = false
+  }
+}
+
+// 点击收藏按钮：未登录跳登录；已收藏则取消收藏，否则收藏当前新闻
+async function toggleFavorite() {
+  if (!isLoggedIn.value) {
+    emit('login')
+    return
+  }
+  if (favLoading.value) return
+  const willRemove = isFavorite.value
+  favLoading.value = true
+  favError.value = ''
+  try {
+    if (willRemove) {
+      await removeFavorite(currentId.value)
+      isFavorite.value = false
+    } else {
+      await addFavorite(currentId.value)
+      isFavorite.value = true
+    }
+  } catch (e) {
+    favError.value = e.message || (willRemove ? '取消收藏失败，请稍后重试' : '收藏失败，请稍后重试')
+  } finally {
+    favLoading.value = false
   }
 }
 
@@ -75,7 +125,19 @@ onMounted(() => fetchDetail())
     <!-- 详情内容 + 相关推荐 -->
     <template v-else-if="detail">
       <article class="detail-card">
-        <h1 class="detail-title">{{ detail.title }}</h1>
+        <div class="detail-head">
+          <h1 class="detail-title">{{ detail.title }}</h1>
+          <button
+            class="fav-btn"
+            :class="{ active: isFavorite }"
+            :disabled="favLoading"
+            @click="toggleFavorite"
+          >
+            <span v-if="favLoading" class="fav-spinner" aria-label="收藏中"></span>
+            <span v-else>{{ isFavorite ? '★ 已收藏' : '☆ 收藏' }}</span>
+          </button>
+        </div>
+        <p v-if="favError" class="fav-error">{{ favError }}</p>
 
         <div class="detail-meta">
           <span v-if="detail.author" class="meta-author">{{ detail.author }}</span>
@@ -162,6 +224,62 @@ onMounted(() => fetchDetail())
   font-weight: 700;
   line-height: 1.4;
   color: #1f2329;
+}
+
+.detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.detail-head .detail-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.fav-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid #e02e24;
+  border-radius: 20px;
+  background: #fff;
+  color: #e02e24;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.fav-btn:hover:not(:disabled) {
+  background: #fff1f0;
+}
+
+.fav-btn.active {
+  background: #e02e24;
+  color: #fff;
+}
+
+.fav-btn:disabled {
+  cursor: not-allowed;
+}
+
+.fav-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(224, 46, 36, 0.3);
+  border-top-color: #e02e24;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.fav-error {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #e02e24;
 }
 
 .detail-meta {
