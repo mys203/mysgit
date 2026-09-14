@@ -4,6 +4,7 @@ import NewsCategories from './views/NewsCategories.vue'
 import NewsList from './views/NewsList.vue'
 import NewsDetail from './views/NewsDetail.vue'
 import FavoriteList from './views/FavoriteList.vue'
+import HistoryList from './views/HistoryList.vue'
 import UserAuth from './views/UserAuth.vue'
 import UserAvatar from './components/UserAvatar.vue'
 
@@ -49,6 +50,10 @@ const moduleSubtitle = computed(() =>
           @click="switchModule('favorite')"
         >⭐ 收藏</button>
         <button
+          :class="['nav-btn', { active: currentModule === 'history' }]"
+          @click="switchModule('history')"
+        >🕐 历史</button>
+        <button
           :class="['nav-btn', { active: currentModule === 'user' }]"
           @click="switchModule('user')"
         >👤 用户</button>
@@ -83,6 +88,17 @@ const moduleSubtitle = computed(() =>
           @login="switchModule('user')"
         />
         <FavoriteList v-else @select="selectedNews = $event" @login="switchModule('user')" />
+      </template>
+
+      <!-- 历史模块：浏览历史列表 -->
+      <template v-else-if="currentModule === 'history'">
+        <NewsDetail
+          v-if="selectedNews"
+          :news="selectedNews"
+          @back="selectedNews = null"
+          @login="switchModule('user')"
+        />
+        <HistoryList v-else @select="selectedNews = $event" @login="switchModule('user')" />
       </template>
 
       <!-- 用户模块：登录 / 注册 -->

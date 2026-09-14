@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { getNewsDetail } from '../api/news'
 import { checkFavorite, addFavorite, removeFavorite } from '../api/favorite'
+import { addNewsHistory } from '../api/history'
 import { authState } from '../utils/auth'
 
 const props = defineProps({
@@ -50,6 +51,8 @@ async function fetchDetail(id = currentId.value) {
     currentId.value = id
     // 详情加载完后再查收藏状态（不阻塞详情展示）
     fetchFavorite(id)
+    // 已登录则记录浏览历史（失败不打断阅读）
+    recordHistory(id)
   } catch (e) {
     error.value = e.message || '加载失败'
   } finally {
@@ -68,6 +71,16 @@ async function fetchFavorite(id = currentId.value) {
   } catch (e) {
     // 检查失败不打断阅读，保持未收藏状态
     isFavorite.value = false
+  }
+}
+
+// 记录浏览历史：未登录跳过，失败静默处理不打断阅读
+async function recordHistory(id) {
+  if (!isLoggedIn.value) return
+  try {
+    await addNewsHistory(id)
+  } catch (e) {
+    // 记录失败不影响阅读体验，忽略即可
   }
 }
 
