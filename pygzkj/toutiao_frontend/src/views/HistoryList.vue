@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getHistoryList } from '../api/history'
+import { getHistoryList, deleteHistory } from '../api/history'
 import { authState } from '../utils/auth'
 
 const emit = defineEmits(['select', 'login'])
@@ -15,6 +15,8 @@ const hasMore = ref(false)
 const loading = ref(false)
 const loadingMore = ref(false)
 const error = ref('')
+const removeError = ref('')
+const removingId = ref(null)
 
 function formatDate(value) {
   if (!value) return ''
@@ -47,6 +49,21 @@ async function fetchList(isLoadMore = false) {
 function loadMore() {
   page.value += 1
   fetchList(true)
+}
+
+async function handleRemove(item) {
+  if (removingId.value !== null) return
+  removingId.value = item.id
+  removeError.value = ''
+  try {
+    await deleteHistory(item.id)
+    list.value = list.value.filter((n) => n.id !== item.id)
+    total.value = Math.max(0, total.value - 1)
+  } catch (e) {
+    removeError.value = e.message || '删除失败'
+  } finally {
+    removingId.value = null
+  }
 }
 
 onMounted(() => {
@@ -86,7 +103,9 @@ onMounted(() => {
       </div>
 
       <!-- 历史列表 -->
-      <div v-else class="fav-items">
+      <template v-else>
+        <p v-if="removeError" class="fav-error">{{ removeError }}</p>
+        <div class="fav-items">
         <article
           v-for="item in list"
           :key="item.id"
@@ -109,8 +128,16 @@ onMounted(() => {
               <span v-if="item.view_time" class="meta-time">浏览于 {{ formatDate(item.view_time) }}</span>
             </div>
           </div>
+          <button
+            class="fav-remove"
+            :disabled="removingId === item.id"
+            @click.stop="handleRemove(item)"
+          >
+            {{ removingId === item.id ? '删除中…' : '删除' }}
+          </button>
         </article>
       </div>
+      </template>
 
       <!-- 加载更多 -->
       <div v-if="hasMore" class="load-more">
@@ -211,6 +238,34 @@ onMounted(() => {
 .meta-author {
   color: #e02e24;
   font-weight: 600;
+}
+
+.fav-remove {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border: 1px solid #e02e24;
+  border-radius: 20px;
+  background: #fff;
+  color: #e02e24;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.fav-remove:hover:not(:disabled) {
+  background: #fff1f0;
+}
+
+.fav-remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fav-error {
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: #e02e24;
 }
 
 .load-more {

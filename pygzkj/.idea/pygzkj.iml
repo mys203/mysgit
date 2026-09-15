@@ -7,6 +7,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/python进阶-fastapi学习/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/toutiao_backend/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/xm/toutiao_backend/.venv" />
     </content>
     <orderEntry type="jdk" jdkName="D:\mys-k\pygzkj\.venv" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

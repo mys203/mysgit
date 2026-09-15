@@ -25,3 +25,16 @@ export function getHistoryList(params = {}) {
     params
   })
 }
+
+/**
+ * 删除某条浏览历史
+ * @param {number} newsId 新闻 ID
+ * @returns {Promise} 后端删除成功后 data 为空，走统一成功返回
+ */
+export function deleteHistory(newsId) {
+  return request({
+    url: '/history/delete',
+    method: 'delete',
+    params: { news_id: newsId }
+  })
+}

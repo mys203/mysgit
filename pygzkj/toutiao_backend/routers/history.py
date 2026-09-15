@@ -1,7 +1,8 @@
 import datetime
 
-from fastapi import FastAPI, APIRouter, Depends, Query
+from fastapi import FastAPI, APIRouter, Depends, Query, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 
 from config.db_config import get_db
 from crud import history
@@ -34,3 +35,15 @@ async def list(
         news_list, total = await history.get_list_history(db, page_size, page,user.id)
         has_more = total > page * page_size
         return success_response(massage="获取历史列表成功",date={"List": news_list, "total": total, "hasMore": has_more})
+
+
+@router.delete("/delete")
+async def detele(
+        db:AsyncSession = Depends(get_db),
+        user: User = Depends(get_current_user),
+        news_id: int = Query(0),
+):
+        result = await history.delete_histories(db, news_id, user.id)
+        if not result:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="历史记录不存在")
+        return success_response(massage="删除成功")

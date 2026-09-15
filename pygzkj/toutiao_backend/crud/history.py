@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy import select, func
+from sqlalchemy import select, func, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.favorite import Favorite
@@ -61,3 +61,13 @@ async def get_list_history(
     return news_list, total
 
 
+async def delete_histories(
+        db:AsyncSession,
+        news_id:int,
+        user_id:int,
+):
+    #类似收藏的删除
+    stmt=delete(History).where(History.user_id == user_id, History.news_id == news_id)
+    result = await db.execute(stmt)
+    await db.commit()
+    return result.rowcount > 0

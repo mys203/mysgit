@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, Header, security
 from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from joblib import numpy_pickle
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
