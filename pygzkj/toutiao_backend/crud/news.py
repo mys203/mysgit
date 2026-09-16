@@ -1,15 +1,28 @@
-from unittest import result
 
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
+
+from cache.news_cache import get_cache_categories, set_cache_categories
 #把模型类导进来（最重要）
 from models.news import Category, News
 
 #第一轮对表的查询操作
 async def get_news_category(db:AsyncSession,skip: int = 0, limit: int = 10):
+    #从缓存里读取，如果有就返回，没有就查库
+    cache_category = await get_cache_categories()
+    if cache_category:
+        return cache_category
+
     stmt = select(Category).offset(skip).limit(limit)
     results = await db.execute(stmt)
-    return results.scalars().all()
+    categories= results.scalars().all()  #问题categories是ORM数据无法直接传到操作里
+
+    if categories:
+        category = jsonable_encoder(categories)  #这个解决
+        await  set_cache_categories(category)
+    return categories
+
 
 #第二轮对表的查询操作，获得新闻列表
 async def get_news_list(db:AsyncSession,category_id:int,
