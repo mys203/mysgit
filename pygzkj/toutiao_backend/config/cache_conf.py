@@ -14,8 +14,9 @@ redis_client=redis.Redis(
     host=REDIS_URL,  # Redis服务器的主机地址
     port=REDIS_PORT, #Redis的端口号
     db=REDIS_DB, #Redis,数据的编号
-    decode_responses=True  #是否将数据解码为字符串·
-
+    decode_responses=True,  #是否将数据解码为字符串·
+    socket_connect_timeout=2,  #连接超时2秒，Redis挂了不拖垮接口
+    socket_timeout=2,  #读写超时2秒
 )
 
 #获取字符串的缓存方法

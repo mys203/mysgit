@@ -112,11 +112,12 @@ watch(() => props.category?.id, fetchList, { immediate: true })
 .section-head h2 {
   font-size: 20px;
   font-weight: 700;
+  color: #ececf0;
 }
 
 .count {
   font-size: 13px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 
 .news-items {
@@ -129,17 +130,17 @@ watch(() => props.category?.id, fetchList, { immediate: true })
   display: flex;
   align-items: center;
   gap: 14px;
-  background: #fff;
+  background: #15151a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 12px;
   padding: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 .news-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  border-color: rgba(212, 175, 55, 0.45);
 }
 
 .news-img {
@@ -148,7 +149,7 @@ watch(() => props.category?.id, fetchList, { immediate: true })
   height: 80px;
   object-fit: cover;
   border-radius: 8px;
-  background: #f0f1f3;
+  background: #1e1e25;
 }
 
 .news-body {
@@ -159,21 +160,21 @@ watch(() => props.category?.id, fetchList, { immediate: true })
 .news-arrow {
   flex-shrink: 0;
   font-size: 24px;
-  color: #c9cdd4;
+  color: #5a5a64;
   line-height: 1;
 }
 
 .news-title {
   font-size: 16px;
   font-weight: 600;
-  color: #1f2329;
+  color: #ececf0;
   line-height: 1.4;
 }
 
 .news-desc {
   margin-top: 6px;
   font-size: 13px;
-  color: #6b7280;
+  color: #9b9ba6;
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -187,7 +188,7 @@ watch(() => props.category?.id, fetchList, { immediate: true })
   gap: 12px;
   margin-top: 8px;
   font-size: 12px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 
 .state-box {
@@ -197,16 +198,17 @@ watch(() => props.category?.id, fetchList, { immediate: true })
   justify-content: center;
   gap: 12px;
   padding: 60px 20px;
-  background: #fff;
+  background: #15151a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 12px;
-  color: #8a919f;
+  color: #9b9ba6;
 }
 
 .spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid #ffe3e1;
-  border-top-color: #e02e24;
+  border: 3px solid rgba(212, 175, 55, 0.2);
+  border-top-color: #d4af37;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -218,16 +220,17 @@ watch(() => props.category?.id, fetchList, { immediate: true })
 }
 
 .error-text {
-  color: #e02e24;
+  color: #ff6b6b;
 }
 
 .retry-btn {
   padding: 8px 22px;
   border: none;
   border-radius: 8px;
-  background: #e02e24;
-  color: #fff;
+  background: linear-gradient(135deg, #d4af37 0%, #b8962f 100%);
+  color: #1a1a1a;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: opacity 0.15s ease;
 }

@@ -83,11 +83,12 @@ onMounted(fetchCategories)
 .section-head h2 {
   font-size: 20px;
   font-weight: 700;
+  color: #ececf0;
 }
 
 .count {
   font-size: 13px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 
 .category-grid {
@@ -103,16 +104,17 @@ onMounted(fetchCategories)
   justify-content: center;
   gap: 12px;
   padding: 60px 20px;
-  background: #fff;
+  background: #15151a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 12px;
-  color: #8a919f;
+  color: #9b9ba6;
 }
 
 .spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid #ffe3e1;
-  border-top-color: #e02e24;
+  border: 3px solid rgba(212, 175, 55, 0.2);
+  border-top-color: #d4af37;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -124,16 +126,17 @@ onMounted(fetchCategories)
 }
 
 .error-text {
-  color: #e02e24;
+  color: #ff6b6b;
 }
 
 .retry-btn {
   padding: 8px 22px;
   border: none;
   border-radius: 8px;
-  background: #e02e24;
-  color: #fff;
+  background: linear-gradient(135deg, #d4af37 0%, #b8962f 100%);
+  color: #1a1a1a;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: opacity 0.15s ease;
 }

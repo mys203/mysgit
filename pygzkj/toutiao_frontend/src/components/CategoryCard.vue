@@ -24,17 +24,17 @@ const emit = defineEmits(['select'])
   display: flex;
   align-items: center;
   gap: 14px;
-  background: #fff;
+  background: #15151a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 .category-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  border-color: rgba(212, 175, 55, 0.45);
 }
 
 .category-rank {
@@ -45,8 +45,8 @@ const emit = defineEmits(['select'])
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: #fff1f0;
-  color: #e02e24;
+  background: rgba(212, 175, 55, 0.12);
+  color: #d4af37;
   font-weight: 700;
   font-size: 15px;
 }
@@ -54,12 +54,12 @@ const emit = defineEmits(['select'])
 .category-name {
   font-size: 17px;
   font-weight: 600;
-  color: #1f2329;
+  color: #ececf0;
 }
 
 .category-id {
   margin-top: 2px;
   font-size: 12px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 </style>

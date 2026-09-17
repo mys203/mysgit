@@ -120,16 +120,16 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocumentClick))
 /* 未登录入口 */
 .avatar-login {
   padding: 8px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.6);
   border-radius: 20px;
   background: transparent;
-  color: #fff;
+  color: #d4af37;
   font-size: 14px;
   cursor: pointer;
   transition: background 0.15s ease;
 }
 .avatar-login:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(212, 175, 55, 0.15);
 }
 
 /* 已登录头像按钮 */
@@ -140,20 +140,20 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocumentClick))
   padding: 4px 10px 4px 4px;
   border: none;
   border-radius: 24px;
-  background: rgba(0, 0, 0, 0.15);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ececf0;
   cursor: pointer;
   transition: background 0.15s ease;
 }
 .avatar-btn:hover {
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.15);
 }
 .avatar-img {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
-  background: #fff;
+  background: #1e1e25;
 }
 .avatar-name {
   font-size: 14px;
@@ -177,26 +177,27 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocumentClick))
   right: 0;
   width: 240px;
   padding: 16px;
-  background: #fff;
+  background: #1c1c22;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   z-index: 1000;
   text-align: left;
-  color: #1f2329;
+  color: #ececf0;
 }
 .panel-head {
   display: flex;
   align-items: center;
   gap: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #f0f1f3;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 .panel-avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
   object-fit: cover;
-  background: #f0f1f3;
+  background: #1e1e25;
 }
 .panel-head-text {
   min-width: 0;
@@ -204,21 +205,21 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocumentClick))
 .panel-username {
   font-size: 16px;
   font-weight: 700;
-  color: #1f2329;
+  color: #ececf0;
 }
 .panel-nick {
   margin-top: 2px;
   font-size: 13px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 .panel-loading,
 .panel-error {
   padding: 12px 0;
   font-size: 13px;
-  color: #8a919f;
+  color: #9b9ba6;
 }
 .panel-error {
-  color: #e02e24;
+  color: #ff6b6b;
 }
 .panel-list {
   list-style: none;
@@ -233,30 +234,29 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocumentClick))
   flex-shrink: 0;
   width: 60px;
   font-size: 13px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 .panel-val {
   flex: 1;
   min-width: 0;
   font-size: 13px;
-  color: #1f2329;
+  color: #ececf0;
   word-break: break-all;
 }
 .panel-logout {
   width: 100%;
   margin-top: 12px;
   padding: 9px 0;
-  border: 1px solid #e02e24;
+  border: 1px solid rgba(212, 175, 55, 0.5);
   border-radius: 8px;
-  background: #fff;
-  color: #e02e24;
+  background: transparent;
+  color: #d4af37;
   font-size: 14px;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease;
 }
 .panel-logout:hover {
-  background: #e02e24;
-  color: #fff;
+  background: rgba(212, 175, 55, 0.12);
 }
 
 /* 面板展开/收起过渡 */

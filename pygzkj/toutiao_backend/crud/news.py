@@ -3,7 +3,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 
-from cache.news_cache import get_cache_categories, set_cache_categories
+from cache.news_cache import get_cache_categories, set_cache_categories, get_cache_list, set_cache_list
 #把模型类导进来（最重要）
 from models.news import Category, News
 
@@ -28,9 +28,19 @@ async def get_news_category(db:AsyncSession,skip: int = 0, limit: int = 10):
 async def get_news_list(db:AsyncSession,category_id:int,
                         skip: int = 0,
                         limit: int = 100):
+    #先从缓存里读，有就直接返回
+    cache_list = await get_cache_list(category_id, skip, limit)
+    if cache_list:
+        return cache_list
+
     stmt = select(News).where(News.category_id == category_id).offset(skip).limit(limit)
     results = await db.execute(stmt)
-    return results.scalars().all()
+    news_list = results.scalars().all()
+
+    #查到数据就写入缓存
+    if news_list:
+        await set_cache_list(jsonable_encoder(news_list), category_id, skip, limit)
+    return news_list
 
 #第三轮对表的查询操作，获得新闻内容
 async def get_news_detail(db:AsyncSession,category_id:int,):

@@ -164,11 +164,12 @@ onMounted(() => {
 .section-head h2 {
   font-size: 20px;
   font-weight: 700;
+  color: #ececf0;
 }
 
 .count {
   font-size: 13px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 
 .fav-items {
@@ -181,17 +182,17 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: #fff;
+  background: #15151a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 12px;
   padding: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 .fav-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  border-color: rgba(212, 175, 55, 0.45);
 }
 
 .fav-img {
@@ -200,7 +201,7 @@ onMounted(() => {
   height: 80px;
   object-fit: cover;
   border-radius: 8px;
-  background: #f0f1f3;
+  background: #1e1e25;
 }
 
 .fav-body {
@@ -211,14 +212,14 @@ onMounted(() => {
 .fav-title {
   font-size: 16px;
   font-weight: 600;
-  color: #1f2329;
+  color: #ececf0;
   line-height: 1.4;
 }
 
 .fav-desc {
   margin-top: 6px;
   font-size: 13px;
-  color: #6b7280;
+  color: #9b9ba6;
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -232,29 +233,29 @@ onMounted(() => {
   gap: 12px;
   margin-top: 8px;
   font-size: 12px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 
 .meta-author {
-  color: #e02e24;
+  color: #d4af37;
   font-weight: 600;
 }
 
 .fav-remove {
   flex-shrink: 0;
   padding: 7px 14px;
-  border: 1px solid #e02e24;
+  border: 1px solid rgba(212, 175, 55, 0.5);
   border-radius: 20px;
-  background: #fff;
-  color: #e02e24;
+  background: transparent;
+  color: #d4af37;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease;
 }
 
 .fav-remove:hover:not(:disabled) {
-  background: #fff1f0;
+  background: rgba(212, 175, 55, 0.12);
 }
 
 .fav-remove:disabled {
@@ -265,7 +266,7 @@ onMounted(() => {
 .fav-error {
   margin-bottom: 12px;
   font-size: 13px;
-  color: #e02e24;
+  color: #ff6b6b;
 }
 
 .load-more {
@@ -276,18 +277,18 @@ onMounted(() => {
 
 .more-btn {
   padding: 10px 40px;
-  border: 1px solid #e02e24;
+  border: 1px solid rgba(212, 175, 55, 0.5);
   border-radius: 24px;
-  background: #fff;
-  color: #e02e24;
+  background: transparent;
+  color: #d4af37;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease;
 }
 
 .more-btn:hover:not(:disabled) {
-  background: #fff1f0;
+  background: rgba(212, 175, 55, 0.12);
 }
 
 .more-btn:disabled {
@@ -302,16 +303,17 @@ onMounted(() => {
   justify-content: center;
   gap: 12px;
   padding: 60px 20px;
-  background: #fff;
+  background: #15151a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 12px;
-  color: #8a919f;
+  color: #9b9ba6;
 }
 
 .spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid #ffe3e1;
-  border-top-color: #e02e24;
+  border: 3px solid rgba(212, 175, 55, 0.2);
+  border-top-color: #d4af37;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -323,16 +325,17 @@ onMounted(() => {
 }
 
 .error-text {
-  color: #e02e24;
+  color: #ff6b6b;
 }
 
 .retry-btn {
   padding: 8px 22px;
   border: none;
   border-radius: 8px;
-  background: #e02e24;
-  color: #fff;
+  background: linear-gradient(135deg, #d4af37 0%, #b8962f 100%);
+  color: #1a1a1a;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: opacity 0.15s ease;
 }

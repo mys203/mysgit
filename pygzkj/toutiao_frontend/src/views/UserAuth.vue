@@ -478,10 +478,10 @@ async function submitChangePwd() {
 
 .auth-card,
 .success-card {
-  background: #fff;
+  background: #15151a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 16px;
   padding: 36px 32px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 /* 卡片头部 */
@@ -498,19 +498,19 @@ async function submitChangePwd() {
   justify-content: center;
   font-size: 26px;
   border-radius: 50%;
-  background: #fff1f0;
+  background: rgba(212, 175, 55, 0.12);
 }
 
 .card-title {
   font-size: 22px;
   font-weight: 700;
-  color: #1f2329;
+  color: #ececf0;
 }
 
 .card-sub {
   margin-top: 6px;
   font-size: 13px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 
 /* 模式切换 */
@@ -519,7 +519,8 @@ async function submitChangePwd() {
   gap: 4px;
   margin-top: 24px;
   padding: 4px;
-  background: #f4f5f7;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
 }
 
@@ -529,17 +530,16 @@ async function submitChangePwd() {
   border: none;
   border-radius: 9px;
   background: transparent;
-  color: #8a919f;
+  color: #9b9ba6;
   font-size: 14px;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
 .mode-tab.active {
-  background: #fff;
-  color: #e02e24;
+  background: linear-gradient(135deg, #d4af37 0%, #b8962f 100%);
+  color: #1a1a1a;
   font-weight: 600;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .auth-form {
@@ -573,47 +573,51 @@ async function submitChangePwd() {
 .field-label {
   font-size: 14px;
   font-weight: 600;
-  color: #1f2329;
+  color: #ececf0;
 }
 
 .field-input {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #e5e6eb;
+  border: 1px solid #2a2a33;
   border-radius: 10px;
   font-size: 15px;
-  color: #1f2329;
-  background: #fafbfc;
+  color: #ececf0;
+  background: #1e1e25;
   outline: none;
-  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .field-input:focus {
-  border-color: #e02e24;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(224, 46, 36, 0.1);
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
 }
 
 .field-input::placeholder {
-  color: #b6bcc6;
+  color: #6e6e78;
+}
+
+select.field-input option {
+  background: #1e1e25;
+  color: #ececf0;
 }
 
 .error-box {
   padding: 10px 14px;
-  border: 1px solid #ffd6d4;
+  border: 1px solid rgba(255, 107, 107, 0.3);
   border-radius: 8px;
-  background: #fff1f0;
-  color: #e02e24;
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
   font-size: 13px;
 }
 
 .success-box {
   margin-top: 16px;
   padding: 10px 14px;
-  border: 1px solid #d4f0d8;
+  border: 1px solid rgba(74, 222, 128, 0.3);
   border-radius: 8px;
-  background: #f0fbf2;
-  color: #1f8f3a;
+  background: rgba(74, 222, 128, 0.1);
+  color: #4ade80;
   font-size: 13px;
 }
 
@@ -626,8 +630,8 @@ async function submitChangePwd() {
   padding: 13px 16px;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(135deg, #e02e24 0%, #ff5a3c 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #d4af37 0%, #b8962f 100%);
+  color: #1a1a1a;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -649,9 +653,14 @@ async function submitChangePwd() {
 
 .submit-btn.secondary {
   margin-top: 24px;
-  background: #fff;
-  color: #e02e24;
-  border: 1px solid #e02e24;
+  background: transparent;
+  color: #d4af37;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+}
+
+.submit-btn.secondary:hover:not(:disabled) {
+  background: rgba(212, 175, 55, 0.12);
+  opacity: 1;
 }
 
 .action-row {
@@ -667,8 +676,8 @@ async function submitChangePwd() {
 .btn-spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-top-color: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  border-top-color: #1a1a1a;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -689,28 +698,28 @@ async function submitChangePwd() {
   height: 88px;
   border-radius: 50%;
   object-fit: cover;
-  background: #f0f1f3;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #1e1e25;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .success-title {
   margin-top: 18px;
   font-size: 22px;
   font-weight: 700;
-  color: #1f2329;
+  color: #ececf0;
 }
 
 .success-welcome {
   margin-top: 6px;
   font-size: 14px;
-  color: #6b7280;
+  color: #9b9ba6;
 }
 
 .info-list {
   list-style: none;
   margin-top: 24px;
   text-align: left;
-  border-top: 1px solid #f0f1f3;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .info-item {
@@ -718,26 +727,26 @@ async function submitChangePwd() {
   align-items: flex-start;
   gap: 12px;
   padding: 12px 0;
-  border-bottom: 1px solid #f0f1f3;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .info-key {
   flex-shrink: 0;
   width: 72px;
   font-size: 13px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 
 .info-val {
   flex: 1;
   min-width: 0;
   font-size: 14px;
-  color: #1f2329;
+  color: #ececf0;
   word-break: break-all;
 }
 
 .info-val.token {
-  color: #e02e24;
+  color: #d4af37;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 13px;
 }

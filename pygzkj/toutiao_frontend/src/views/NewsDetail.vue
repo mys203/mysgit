@@ -211,32 +211,31 @@ onMounted(() => fetchDetail())
 .back-btn {
   align-self: flex-start;
   padding: 8px 16px;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: #fff;
-  color: #1f2329;
+  background: #15151a;
+  color: #ececf0;
   font-size: 14px;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  transition: box-shadow 0.15s ease;
+  transition: border-color 0.15s ease;
 }
 
 .back-btn:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-color: rgba(212, 175, 55, 0.5);
 }
 
 .detail-card {
-  background: #fff;
+  background: #15151a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 14px;
   padding: 28px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .detail-title {
   font-size: 24px;
   font-weight: 700;
   line-height: 1.4;
-  color: #1f2329;
+  color: #ececf0;
 }
 
 .detail-head {
@@ -257,10 +256,10 @@ onMounted(() => fetchDetail())
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  border: 1px solid #e02e24;
+  border: 1px solid rgba(212, 175, 55, 0.5);
   border-radius: 20px;
-  background: #fff;
-  color: #e02e24;
+  background: transparent;
+  color: #d4af37;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -268,12 +267,12 @@ onMounted(() => fetchDetail())
 }
 
 .fav-btn:hover:not(:disabled) {
-  background: #fff1f0;
+  background: rgba(212, 175, 55, 0.12);
 }
 
 .fav-btn.active {
-  background: #e02e24;
-  color: #fff;
+  background: linear-gradient(135deg, #d4af37 0%, #b8962f 100%);
+  color: #1a1a1a;
 }
 
 .fav-btn:disabled {
@@ -283,8 +282,8 @@ onMounted(() => fetchDetail())
 .fav-spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(224, 46, 36, 0.3);
-  border-top-color: #e02e24;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-top-color: #d4af37;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -292,7 +291,7 @@ onMounted(() => fetchDetail())
 .fav-error {
   margin-top: 10px;
   font-size: 13px;
-  color: #e02e24;
+  color: #ff6b6b;
 }
 
 .detail-meta {
@@ -301,11 +300,11 @@ onMounted(() => fetchDetail())
   gap: 14px;
   margin-top: 14px;
   font-size: 13px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 
 .meta-author {
-  color: #e02e24;
+  color: #d4af37;
   font-weight: 600;
 }
 
@@ -316,14 +315,14 @@ onMounted(() => fetchDetail())
   object-fit: cover;
   border-radius: 10px;
   margin-top: 20px;
-  background: #f0f1f3;
+  background: #1e1e25;
 }
 
 .detail-content {
   margin-top: 20px;
   font-size: 15px;
   line-height: 1.8;
-  color: #333;
+  color: #d5d5dc;
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -335,16 +334,17 @@ onMounted(() => fetchDetail())
   justify-content: center;
   gap: 12px;
   padding: 60px 20px;
-  background: #fff;
+  background: #15151a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 12px;
-  color: #8a919f;
+  color: #9b9ba6;
 }
 
 .spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid #ffe3e1;
-  border-top-color: #e02e24;
+  border: 3px solid rgba(212, 175, 55, 0.2);
+  border-top-color: #d4af37;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -356,16 +356,17 @@ onMounted(() => fetchDetail())
 }
 
 .error-text {
-  color: #e02e24;
+  color: #ff6b6b;
 }
 
 .retry-btn {
   padding: 8px 22px;
   border: none;
   border-radius: 8px;
-  background: #e02e24;
-  color: #fff;
+  background: linear-gradient(135deg, #d4af37 0%, #b8962f 100%);
+  color: #1a1a1a;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: opacity 0.15s ease;
 }
@@ -376,19 +377,19 @@ onMounted(() => fetchDetail())
 
 /* 相关推荐 */
 .related-section {
-  background: #fff;
+  background: #15151a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 14px;
   padding: 24px 28px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .related-title {
   font-size: 18px;
   font-weight: 700;
-  color: #1f2329;
+  color: #ececf0;
   padding-bottom: 12px;
   margin-bottom: 8px;
-  border-bottom: 1px solid #f0f1f3;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   position: relative;
 }
 
@@ -400,7 +401,7 @@ onMounted(() => fetchDetail())
   width: 36px;
   height: 3px;
   border-radius: 2px;
-  background: #e02e24;
+  background: #d4af37;
 }
 
 .related-items {
@@ -420,7 +421,7 @@ onMounted(() => fetchDetail())
 }
 
 .related-item:hover {
-  background: #f7f8fa;
+  background: rgba(255, 255, 255, 0.04);
   transform: translateX(4px);
 }
 
@@ -430,7 +431,7 @@ onMounted(() => fetchDetail())
   height: 72px;
   object-fit: cover;
   border-radius: 8px;
-  background: #f0f1f3;
+  background: #1e1e25;
 }
 
 .related-body {
@@ -441,7 +442,7 @@ onMounted(() => fetchDetail())
 .related-item-title {
   font-size: 15px;
   font-weight: 600;
-  color: #1f2329;
+  color: #ececf0;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -450,13 +451,13 @@ onMounted(() => fetchDetail())
 }
 
 .related-item:hover .related-item-title {
-  color: #e02e24;
+  color: #d4af37;
 }
 
 .related-desc {
   margin-top: 4px;
   font-size: 12px;
-  color: #6b7280;
+  color: #9b9ba6;
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -470,13 +471,13 @@ onMounted(() => fetchDetail())
   gap: 12px;
   margin-top: 6px;
   font-size: 12px;
-  color: #8a919f;
+  color: #6e6e78;
 }
 
 .related-arrow {
   flex-shrink: 0;
   font-size: 22px;
-  color: #c9cdd4;
+  color: #5a5a64;
   line-height: 1;
 }
 </style>

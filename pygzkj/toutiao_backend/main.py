@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from routers import news, users, favorite, history
+from routers import news, users, favorite, history, chat_ai
 from schemas.exception_handlers import register_exception_handlers
 
 app = FastAPI()
@@ -34,3 +34,5 @@ app.include_router(users.router)
 app.include_router(favorite.router)
 
 app.include_router(history.router)
+
+app.include_router(chat_ai.router)

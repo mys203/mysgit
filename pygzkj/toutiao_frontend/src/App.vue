@@ -6,13 +6,14 @@ import NewsDetail from './views/NewsDetail.vue'
 import FavoriteList from './views/FavoriteList.vue'
 import HistoryList from './views/HistoryList.vue'
 import UserAuth from './views/UserAuth.vue'
+import ChatAI from './views/ChatAI.vue'
 import UserAvatar from './components/UserAvatar.vue'
 
 // 当前选中的分类
 const activeCategory = ref(null)
 // 当前选中的新闻（非空时显示详情页）
 const selectedNews = ref(null)
-// 当前模块：news 新闻 / favorite 我的收藏 / user 用户
+// 当前模块：news 新闻 / ai AI助手 / favorite 收藏 / history 历史 / user 用户
 const currentModule = ref('news')
 
 // 切换模块：清空详情态，避免跨模块残留详情页
@@ -22,12 +23,26 @@ function switchModule(m) {
 }
 
 // 根据当前模块动态显示标题
-const moduleTitle = computed(() =>
-  currentModule.value === 'news' ? '头条新闻' : '头条用户'
-)
-const moduleSubtitle = computed(() =>
-  currentModule.value === 'news' ? 'Toutiao News' : 'Toutiao Account'
-)
+const moduleTitle = computed(() => {
+  const map = {
+    news: '头条新闻',
+    ai: 'AI 助手',
+    favorite: '我的收藏',
+    history: '浏览历史',
+    user: '个人中心'
+  }
+  return map[currentModule.value] || '头条新闻'
+})
+const moduleSubtitle = computed(() => {
+  const map = {
+    news: 'Toutiao News',
+    ai: 'AI Assistant',
+    favorite: 'Favorites',
+    history: 'History',
+    user: 'Account'
+  }
+  return map[currentModule.value] || 'Toutiao'
+})
 </script>
 
 <template>
@@ -45,6 +60,10 @@ const moduleSubtitle = computed(() =>
           :class="['nav-btn', { active: currentModule === 'news' }]"
           @click="switchModule('news')"
         >📰 新闻</button>
+        <button
+          :class="['nav-btn', { active: currentModule === 'ai' }]"
+          @click="switchModule('ai')"
+        >✨ AI 助手</button>
         <button
           :class="['nav-btn', { active: currentModule === 'favorite' }]"
           @click="switchModule('favorite')"
@@ -79,6 +98,12 @@ const moduleSubtitle = computed(() =>
           />
         </template>
       </template>
+
+      <!-- AI 助手模块 -->
+      <template v-else-if="currentModule === 'ai'">
+        <ChatAI />
+      </template>
+
       <!-- 收藏模块：我的收藏列表 -->
       <template v-else-if="currentModule === 'favorite'">
         <NewsDetail
@@ -117,17 +142,18 @@ const moduleSubtitle = computed(() =>
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-  background: #f4f5f7;
-  color: #1f2329;
+  background: #0a0a0d;
+  color: #ececf0;
   -webkit-font-smoothing: antialiased;
 }
 
 .app-header {
   position: relative;
-  background: linear-gradient(135deg, #e02e24 0%, #ff5a3c 100%);
-  color: #fff;
+  background: linear-gradient(160deg, #16161b 0%, #0a0a0d 100%);
+  color: #ececf0;
   padding: 40px 24px 28px;
   text-align: center;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
 }
 
 .header-avatar {
@@ -141,43 +167,50 @@ body {
   font-size: 26px;
   font-weight: 700;
   letter-spacing: 1px;
+  background: linear-gradient(90deg, #f5e6b8 0%, #d4af37 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .app-subtitle {
   margin-top: 6px;
   font-size: 13px;
-  opacity: 0.85;
+  color: #9b9ba6;
 }
 
 .app-nav {
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 4px;
   margin-top: 24px;
   padding: 4px;
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 24px;
 }
 
 .nav-btn {
-  padding: 9px 30px;
+  padding: 9px 22px;
   border: none;
   border-radius: 20px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.85);
+  color: #9b9ba6;
   font-size: 14px;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
 .nav-btn:hover {
-  color: #fff;
+  color: #ececf0;
 }
 
 .nav-btn.active {
-  background: #fff;
-  color: #e02e24;
+  background: linear-gradient(135deg, #d4af37 0%, #b8962f 100%);
+  color: #1a1a1a;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.35);
 }
 
 .app-main {
