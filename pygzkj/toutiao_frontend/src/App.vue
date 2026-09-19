@@ -59,23 +59,23 @@ const moduleSubtitle = computed(() => {
         <button
           :class="['nav-btn', { active: currentModule === 'news' }]"
           @click="switchModule('news')"
-        >📰 新闻</button>
+        >新闻</button>
         <button
           :class="['nav-btn', { active: currentModule === 'ai' }]"
           @click="switchModule('ai')"
-        >✨ AI 助手</button>
+        >AI 助手</button>
         <button
           :class="['nav-btn', { active: currentModule === 'favorite' }]"
           @click="switchModule('favorite')"
-        >⭐ 收藏</button>
+        >收藏</button>
         <button
           :class="['nav-btn', { active: currentModule === 'history' }]"
           @click="switchModule('history')"
-        >🕐 历史</button>
+        >历史</button>
         <button
           :class="['nav-btn', { active: currentModule === 'user' }]"
           @click="switchModule('user')"
-        >👤 用户</button>
+        >用户</button>
       </nav>
     </header>
 
@@ -167,10 +167,7 @@ body {
   font-size: 26px;
   font-weight: 700;
   letter-spacing: 1px;
-  background: linear-gradient(90deg, #f5e6b8 0%, #d4af37 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #f3d98a;
 }
 
 .app-subtitle {
@@ -206,6 +203,11 @@ body {
   color: #ececf0;
 }
 
+.nav-btn:focus-visible {
+  outline: 2px solid #d4af37;
+  outline-offset: 2px;
+}
+
 .nav-btn.active {
   background: linear-gradient(135deg, #d4af37 0%, #b8962f 100%);
   color: #1a1a1a;
@@ -217,5 +219,10 @@ body {
   max-width: 960px;
   margin: 0 auto;
   padding: 24px 16px 48px;
+}
+
+button:focus-visible {
+  outline: 2px solid #d4af37;
+  outline-offset: 2px;
 }
 </style>

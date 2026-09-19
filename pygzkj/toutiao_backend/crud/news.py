@@ -52,7 +52,7 @@ async def get_news_detail(db:AsyncSession,category_id:int,):
 async def increase_news_views(db:AsyncSession,news_id:int):
     stmt = update(News).where(News.id == news_id).values(views=News.views + 1)#对数据库的进行修改加1
     result = await db.execute(stmt)
-    await db.commit()
+    await db.commit() #每一次修改都要提交
     return result.rowcount > 0
 
 

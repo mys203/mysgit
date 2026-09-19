@@ -14,7 +14,7 @@ const emit = defineEmits(['select'])
     <div class="category-rank">#{{ category.sort_order ?? '-' }}</div>
     <div class="category-body">
       <h3 class="category-name">{{ category.name }}</h3>
-      <p class="category-id">ID: {{ category.id }}</p>
+      <p class="category-id">进入分类</p>
     </div>
   </div>
 </template>

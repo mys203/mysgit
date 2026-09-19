@@ -33,6 +33,11 @@ const isLoggedIn = computed(() => !!authState.token)
 // 当前用户信息与令牌（登录后持久化到 localStorage）
 const userinfo = computed(() => authState.userinfo)
 const token = computed(() => authState.token)
+const showToken = ref(false)
+const maskedToken = computed(() => {
+  if (!authState.token) return ''
+  return showToken.value ? authState.token : '••••••••'
+})
 
 // 修改密码相关状态
 const changingPwd = ref(false)
@@ -241,7 +246,7 @@ async function submitChangePwd() {
     <!-- 登录 / 注册表单 -->
     <div v-if="!isLoggedIn" class="auth-card">
       <div class="card-head">
-        <div class="logo">👤</div>
+        <div class="logo">头</div>
         <h2 class="card-title">{{ isLogin ? '欢迎回来' : '创建账号' }}</h2>
         <p class="card-sub">{{ isLogin ? '登录你的头条账号' : '注册头条账号，开启你的阅读之旅' }}</p>
       </div>
@@ -309,7 +314,7 @@ async function submitChangePwd() {
         :src="userinfo?.avatar"
         :alt="userinfo?.username"
       />
-      <h2 class="success-title">欢迎回来 🎉</h2>
+      <h2 class="success-title">欢迎回来</h2>
       <p class="success-welcome">{{ userinfo?.username }}</p>
 
       <ul v-if="!editing && !changingPwd" class="info-list">
@@ -339,7 +344,10 @@ async function submitChangePwd() {
         </li>
         <li class="info-item">
           <span class="info-key">访问令牌</span>
-          <span class="info-val token">{{ token }}</span>
+          <span class="info-val token">{{ maskedToken }}</span>
+          <button class="token-toggle" type="button" @click="showToken = !showToken">
+            {{ showToken ? '隐藏' : '显示' }}
+          </button>
         </li>
       </ul>
 
@@ -749,5 +757,21 @@ select.field-input option {
   color: #d4af37;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 13px;
+}
+
+.token-toggle {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  border-radius: 8px;
+  background: transparent;
+  color: #d4af37;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.token-toggle:hover {
+  background: rgba(212, 175, 55, 0.12);
 }
 </style>
