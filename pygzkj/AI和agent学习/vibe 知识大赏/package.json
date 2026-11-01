@@ -1,0 +1,31 @@
+{
+  "name": "study-and-iq-video",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "hypit": {
+    "project": true
+  },
+  "devDependencies": {
+    "@hypit/hypit": "^0.3.1",
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/noto-sans-sc": "^5.3.1",
+    "@fontsource/noto-sans-sc": "^5.3.1",
+    "@hypit/composition": "^0.1.0",
+    "@hypit/film": "^0.2.0",
+    "@hypit/fontsource": "^0.2.0",
+    "@hypit/html-program": "^0.1.0",
+    "@hypit/html-video": "^0.2.0",
+    "@hypit/media": "^0.1.0",
+    "@hypit/spatial": "^0.1.0",
+    "@hypit/temporal": "^0.1.0",
+    "@hypit/text-fine": "^0.2.0",
+    "@hypit/timeline": "^0.1.0",
+    "@studio/pain-scene": "file:packages/pain-scene",
+    "@studio/study-iq-scene": "file:packages/study-iq-scene"
+  }
+}

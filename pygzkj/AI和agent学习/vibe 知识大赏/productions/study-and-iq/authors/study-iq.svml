@@ -1,0 +1,61 @@
+<?svml using="@hypit/markup@1"?>
+<svml>
+  <import as="time" from="@hypit/timeline-author@1"/>
+  <import as="spatial" from="@hypit/spatial@1"/>
+  <import as="media" from="@hypit/media@1"/>
+  <import as="mediaop" from="@hypit/media-operations@1"/>
+  <import as="fonts" from="@hypit/fontsource@1"/>
+  <import as="audio" from="@hypit/audio-track@1"/>
+  <import as="film" from="@hypit/film@1"/>
+  <import as="html" from="@hypit/html-video@1"/>
+  <import as="study" from="@studio/study-iq-scene@1"/>
+  <import as="look" source="../recipes/look.svs"/>
+
+  <time:Clock id="clock" frame-rate="30"/>
+  <media:Audio id="music" src="../assets/bgm.mp3"/>
+  <mediaop:Normalize id="music-media" source={music} clock={clock}
+    video="none" audio="default" span-authority="audio"/>
+
+  <!-- 117s of the reference's own soundtrack: same music, same tempo, picture
+       compressed to 1.25x so the accents keep landing on the beat. -->
+  <time:Timeline id="program" clock={clock} end="music.end">
+    <time:Window id="music" from="start" for="117s"/>
+  </time:Timeline>
+  <spatial:Canvas id="canvas" width="1920" height="1080"/>
+  <fonts:Face id="face" package="@fontsource-variable/noto-sans-sc" weight="500" style="normal"/>
+  <media:FontStack id="font" primary={face}/>
+
+  <study:Scene id="film-scene" timeline={program.timeline} within={canvas.bounds} font={font}
+    during={program.window} title="学习与智商" tag="NO.01 · 组块"/>
+
+  <audio:Track id="mix" timeline={program.timeline}>
+    <audio:Clip id="bgm" source={music-media.media} during={program.music}
+      gain="0.92" fade-out="45f"/>
+  </audio:Track>
+
+  <film:Film id="main" canvas={canvas.canvas} timeline={program.timeline}
+    appearance={look.film.main}>
+    <film:Track source={film-scene.visual}/>
+    <film:Track source={mix.audio}/>
+  </film:Film>
+
+  <html:Video id="final" composition={main.composition} timeline={program.timeline}/>
+
+  <!-- Peek renders: the picture without sound, so short checks stay cheap. -->
+  <film:Film id="silent" canvas={canvas.canvas} timeline={program.timeline}
+    appearance={look.film.main}>
+    <film:Track source={film-scene.visual}/>
+  </film:Film>
+  <html:Video id="peek-open" composition={silent.composition} timeline={program.timeline}
+    start-frame="0" end-frame-exclusive="90"/>
+  <html:Video id="peek-board" composition={silent.composition} timeline={program.timeline}
+    start-frame="960" end-frame-exclusive="1050"/>
+  <html:Video id="peek-scramble" composition={silent.composition} timeline={program.timeline}
+    start-frame="1450" end-frame-exclusive="1540"/>
+  <html:Video id="peek-merge" composition={silent.composition} timeline={program.timeline}
+    start-frame="2130" end-frame-exclusive="2220"/>
+  <html:Video id="peek-loops" composition={silent.composition} timeline={program.timeline}
+    start-frame="2560" end-frame-exclusive="2650"/>
+  <html:Video id="peek-close" composition={silent.composition} timeline={program.timeline}
+    start-frame="3380" end-frame-exclusive="3470"/>
+</svml>

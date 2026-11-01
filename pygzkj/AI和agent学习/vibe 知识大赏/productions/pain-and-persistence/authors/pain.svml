@@ -1,0 +1,60 @@
+<?svml using="@hypit/markup@1"?>
+<svml>
+  <import as="time" from="@hypit/timeline-author@1"/>
+  <import as="spatial" from="@hypit/spatial@1"/>
+  <import as="media" from="@hypit/media@1"/>
+  <import as="mediaop" from="@hypit/media-operations@1"/>
+  <import as="fonts" from="@hypit/fontsource@1"/>
+  <import as="audio" from="@hypit/audio-track@1"/>
+  <import as="film" from="@hypit/film@1"/>
+  <import as="html" from="@hypit/html-video@1"/>
+  <import as="pain" from="@studio/pain-scene@1"/>
+  <import as="look" source="../recipes/look.svs"/>
+
+  <time:Clock id="clock" frame-rate="30"/>
+  <media:Audio id="music" src="../assets/bgm.mp3"/>
+  <mediaop:Normalize id="music-media" source={music} clock={clock}
+    video="none" audio="default" span-authority="audio"/>
+
+  <!-- Same soundtrack, same tempo; 1.5x runtime: 97.5s window. -->
+  <time:Timeline id="program" clock={clock} end="music.end">
+    <time:Window id="music" from="start" for="97.5s"/>
+  </time:Timeline>
+  <spatial:Canvas id="canvas" width="1920" height="1080"/>
+  <fonts:Face id="face" package="@fontsource-variable/noto-sans-sc" weight="500" style="normal"/>
+  <media:FontStack id="font" primary={face}/>
+
+  <pain:Scene id="film-scene" timeline={program.timeline} within={canvas.bounds} font={font}
+    during={program.window} title="痛苦和坚持" tag="NO.02 · 预期"/>
+
+  <audio:Track id="mix" timeline={program.timeline}>
+    <audio:Clip id="bgm" source={music-media.media} during={program.music}
+      gain="0.92" fade-out="45f"/>
+  </audio:Track>
+
+  <film:Film id="main" canvas={canvas.canvas} timeline={program.timeline}
+    appearance={look.film.main}>
+    <film:Track source={film-scene.visual}/>
+    <film:Track source={mix.audio}/>
+  </film:Film>
+
+  <html:Video id="final" composition={main.composition} timeline={program.timeline}/>
+
+  <!-- Peek renders: picture only, so short checks stay cheap. -->
+  <film:Film id="silent" canvas={canvas.canvas} timeline={program.timeline}
+    appearance={look.film.main}>
+    <film:Track source={film-scene.visual}/>
+  </film:Film>
+  <html:Video id="peek-open" composition={silent.composition} timeline={program.timeline}
+    start-frame="0" end-frame-exclusive="90"/>
+  <html:Video id="peek-expect" composition={silent.composition} timeline={program.timeline}
+    start-frame="540" end-frame-exclusive="630"/>
+  <html:Video id="peek-gap" composition={silent.composition} timeline={program.timeline}
+    start-frame="980" end-frame-exclusive="1070"/>
+  <html:Video id="peek-steps" composition={silent.composition} timeline={program.timeline}
+    start-frame="1600" end-frame-exclusive="1700"/>
+  <html:Video id="peek-timer" composition={silent.composition} timeline={program.timeline}
+    start-frame="1990" end-frame-exclusive="2080"/>
+  <html:Video id="peek-close" composition={silent.composition} timeline={program.timeline}
+    start-frame="2700" end-frame-exclusive="2790"/>
+</svml>
