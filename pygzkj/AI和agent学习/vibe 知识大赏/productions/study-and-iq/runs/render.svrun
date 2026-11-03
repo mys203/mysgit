@@ -1,5 +1,0 @@
-<?svml using="@hypit/markup/run@1"?>
-<svrun version="1">
-  <author source="../authors/study-iq.svml"/>
-  <target output="final.video"/>
-</svrun>

@@ -1,5 +1,0 @@
-<?svml using="@hypit/markup/run@1"?>
-<svrun version="1">
-  <author source="../authors/pain.svml"/>
-  <target output="final.video"/>
-</svrun>
