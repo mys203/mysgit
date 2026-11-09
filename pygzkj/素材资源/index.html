@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>马寅寿 · 个人主页</title>
+  <meta name="description" content="马寅寿的个人主页：软件工程师，AI 应用方向。">
+  <style>
+    :root {
+      --ink: #1d2733;
+      --muted: #5c6b7a;
+      --line: #e3e8ee;
+      --paper: #f7f8fa;
+      --card: #ffffff;
+      --blue: #2458b8;
+      --blue-soft: #eaf1ff;
+      --amber: #b7791f;
+      --amber-soft: #fdf3e3;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .wrap {
+      width: min(1080px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(247, 248, 250, 0.9);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 58px;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 14px;
+    }
+
+    .nav a {
+      color: var(--muted);
+    }
+
+    .nav a:hover {
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      padding: 92px 0 72px;
+      overflow: hidden;
+      background: #bfe3ff;
+    }
+
+    .beach {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.32),
+        rgba(255, 255, 255, 0) 34%,
+        rgba(255, 255, 255, 0) 68%,
+        rgba(29, 39, 51, 0.1)
+      );
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 16px;
+      padding: 5px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .eyebrow .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2f9e68;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: 44px;
+      line-height: 1.12;
+      font-weight: 800;
+    }
+
+    .hero-lead {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .hero .hero-lead {
+      color: #405266;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 18px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn:hover {
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #1d4aa0;
+    }
+
+    .btn-ghost {
+      border-color: var(--line);
+      background: var(--card);
+      color: var(--ink);
+    }
+
+    .btn-ghost:hover {
+      border-color: #c8d1dc;
+    }
+
+    .avatar {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 168px;
+      height: 168px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #2458b8, #4f7fd0);
+      color: #fff;
+      font-size: 64px;
+      font-weight: 800;
+      box-shadow: 0 18px 40px rgba(36, 88, 184, 0.22);
+    }
+
+    .section {
+      padding: 54px 0;
+    }
+
+    .section + .section {
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      margin-bottom: 26px;
+    }
+
+    .section-head h2 {
+      margin: 0 0 6px;
+      font-size: 26px;
+      line-height: 1.25;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .info-tile {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    .info-tile .label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .info-tile .value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .skill-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    .skill-card h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .chip.alt {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    .project-card .tag {
+      align-self: flex-start;
+      margin-bottom: 12px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: var(--amber-soft);
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .project-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .project-card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .project-card .stack {
+      margin-top: auto;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .contact {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 28px;
+      border-radius: 8px;
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .contact h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+    }
+
+    .contact p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .contact .btn {
+      background: #fff;
+      color: var(--blue);
+    }
+
+    .footer {
+      padding: 26px 0 34px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 840px) {
+      .hero-inner {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+      }
+
+      .about-grid,
+      .skill-grid,
+      .projects {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#top" aria-label="返回顶部">
+        <span class="brand-mark">马</span>
+        <span>马寅寿</span>
+      </a>
+      <nav class="nav" aria-label="主导航">
+        <a href="#about">关于我</a>
+        <a href="#skills">技能</a>
+        <a href="#projects">项目</a>
+        <a href="#contact">联系</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <canvas class="beach" id="beach" aria-hidden="true"></canvas>
+      <div class="hero-scrim" aria-hidden="true"></div>
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="dot"></span>可实习到岗 · AI 应用方向</p>
+          <h1>马寅寿</h1>
+          <p class="hero-lead">
+            软件工程师，喜欢用 Python 把想法快速跑起来。从 FastAPI 后端到 Vue3 前端，
+            再到 Agent 与 RAG，正在一步步把学习变成能用的产品。
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">看我的项目</a>
+            <a class="btn btn-ghost" href="https://github.com/mys203/mysgit" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+        <div class="avatar" aria-hidden="true">马</div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>关于我</h2>
+          <p>在读本科，边上课边动手做东西。</p>
+        </div>
+        <div class="about-grid">
+          <div class="info-tile">
+            <span class="label">学校</span>
+            <span class="value">桂林理工大学</span>
+          </div>
+          <div class="info-tile">
+            <span class="label">专业</span>
+            <span class="value">网络工程 · 本科</span>
+          </div>
+          <div class="info-tile">
+            <span class="label">时间</span>
+            <span class="value">2023.09 - 2027.06</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>技能</h2>
+          <p>会用的东西，主打后端和 AI 应用。</p>
+        </div>
+        <div class="skill-grid">
+          <div class="skill-card">
+            <h3>后端与工程</h3>
+            <div class="chips">
+              <span class="chip">Python</span>
+              <span class="chip">FastAPI</span>
+              <span class="chip">SQLAlchemy</span>
+              <span class="chip">MySQL</span>
+              <span class="chip">Redis</span>
+              <span class="chip">Docker</span>
+              <span class="chip">Git</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h3>前端</h3>
+            <div class="chips">
+              <span class="chip alt">Vue3</span>
+              <span class="chip alt">Vite</span>
+              <span class="chip alt">Axios</span>
+              <span class="chip alt">Streamlit</span>
+              <span class="chip alt">HTML / CSS / JS</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h3>AI 与数据</h3>
+            <div class="chips">
+              <span class="chip">LangChain</span>
+              <span class="chip">RAG</span>
+              <span class="chip">Agent</span>
+              <span class="chip">Prompt Engineering</span>
+              <span class="chip alt">pandas</span>
+              <span class="chip alt">matplotlib</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>项目</h2>
+          <p>几个自己动手跑通过的小作品。</p>
+        </div>
+        <div class="projects">
+          <article class="project-card">
+            <span class="tag">全栈</span>
+            <h3>AI 掘金头条新闻系统</h3>
+            <p>仿今日头条的新闻应用，覆盖注册登录、分类、列表、详情、收藏和历史，前后端分离跑通全流程。</p>
+            <div class="stack">FastAPI + Vue3 + MySQL + Redis</div>
+          </article>
+          <article class="project-card">
+            <span class="tag">Agent</span>
+            <h3>多 Agent 智能招聘系统</h3>
+            <p>主 Agent 拆解需求，多个子 Agent 并行开发与审查，落地岗位、简历、候选人、面试和 AI 招聘问答。</p>
+            <div class="stack">LangChain + FastAPI + Vue3</div>
+          </article>
+          <article class="project-card">
+            <span class="tag">AI 应用</span>
+            <h3>Streamlit 多模型对话网站</h3>
+            <p>接入多个 OpenAI 兼容接口，支持流式输出、会话保存和角色设定。</p>
+            <div class="stack">Streamlit + OpenAI 兼容 API</div>
+          </article>
+          <article class="project-card">
+            <span class="tag">数据</span>
+            <h3>视频网站公开数据爬虫与分析</h3>
+            <p>采集公开视频数据，完成解析、去重、统计和图表输出，沉淀可复用的清洗流程。</p>
+            <div class="stack">requests + pandas + matplotlib</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="wrap">
+        <div class="contact">
+          <div>
+            <h2>一起聊聊</h2>
+            <p>有合适的实习机会，或想交流 Python 和 Agent，欢迎联系我。</p>
+          </div>
+          <a class="btn" href="mailto:2035220169@qq.com">发邮件给我</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">马寅寿 · 桂林理工大学 · github.com/mys203/mysgit</div>
+  </footer>
+
+  <script>
+    (() => {
+      const canvas = document.querySelector('#beach');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      let width = 0;
+      let height = 0;
+      let startTime = performance.now();
+
+      const clouds = [
+        { x: 0.12, y: 0.16, scale: 1.0, speed: 0.008 },
+        { x: 0.46, y: 0.24, scale: 0.72, speed: 0.012 },
+        { x: 0.74, y: 0.13, scale: 1.25, speed: 0.006 },
+        { x: 0.9, y: 0.31, scale: 0.85, speed: 0.01 }
+      ];
+
+      const resize = () => {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = canvas.clientWidth;
+        height = canvas.clientHeight;
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+
+      const drawCloud = (cloud, t) => {
+        const w = 70 * cloud.scale;
+        const x = cloud.x * width + Math.sin(t * cloud.speed) * 24;
+        const y = cloud.y * height;
+        ctx.save();
+        ctx.globalAlpha = 0.88;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.ellipse(x, y, w, w * 0.34, 0, 0, Math.PI * 2);
+        ctx.ellipse(x - w * 0.48, y + w * 0.1, w * 0.55, w * 0.26, 0, 0, Math.PI * 2);
+        ctx.ellipse(x + w * 0.5, y + w * 0.1, w * 0.5, w * 0.24, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      };
+
+      const drawSun = (t) => {
+        const x = width * 0.76;
+        const y = height * 0.22;
+        const radius = Math.min(width, height) * 0.075;
+        const pulse = 1 + Math.sin(t * 0.0004) * 0.02;
+        const glow = ctx.createRadialGradient(x, y, radius * 0.4, x, y, radius * 3.1);
+        glow.addColorStop(0, 'rgba(255, 232, 154, 0.9)');
+        glow.addColorStop(0.35, 'rgba(255, 218, 120, 0.38)');
+        glow.addColorStop(1, 'rgba(255, 218, 120, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(x, y, radius * 3.1 * pulse, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffe38a';
+        ctx.beginPath();
+        ctx.arc(x, y, radius * pulse, 0, Math.PI * 2);
+        ctx.fill();
+      };
+
+      const drawOcean = (t) => {
+        const top = height * 0.62;
+        const shore = height * 0.82;
+        const water = ctx.createLinearGradient(0, top, 0, shore);
+        water.addColorStop(0, '#58b6e4');
+        water.addColorStop(1, '#1d79b4');
+        ctx.fillStyle = water;
+        ctx.fillRect(0, top, width, shore - top);
+
+        const layers = [
+          { y: 0.05, amp: 4, len: 0.018, speed: 0.0018, alpha: 0.5, w: 1.2 },
+          { y: 0.12, amp: 5, len: 0.026, speed: -0.0013, alpha: 0.42, w: 1.5 },
+          { y: 0.2, amp: 6, len: 0.034, speed: 0.001, alpha: 0.36, w: 1.8 }
+        ];
+        layers.forEach((layer) => {
+          ctx.save();
+          ctx.globalAlpha = layer.alpha;
+          ctx.strokeStyle = '#eaf7ff';
+          ctx.lineWidth = layer.w;
+          ctx.beginPath();
+          for (let x = -20; x <= width + 20; x += 6) {
+            const y = top + (shore - top) * layer.y
+              + Math.sin(x * layer.len + t * layer.speed) * layer.amp;
+            if (x === -20) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+          ctx.restore();
+        });
+
+        const sparkles = 18;
+        for (let i = 0; i < sparkles; i += 1) {
+          const x = ((i * 137 + 29) % 1000) / 1000 * width;
+          const y = top + (shore - top) * (0.16 + ((i * 53) % 100) / 180);
+          const twinkle = 0.25 + 0.5 * (0.5 + 0.5 * Math.sin(t * 0.002 + i * 1.7));
+          ctx.fillStyle = `rgba(255, 255, 255, ${twinkle.toFixed(2)})`;
+          ctx.beginPath();
+          ctx.arc(x, y, 1.6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      };
+
+      const drawSand = (t) => {
+        const shore = height * 0.82;
+        const sand = ctx.createLinearGradient(0, shore, 0, height);
+        sand.addColorStop(0, '#f5e3b9');
+        sand.addColorStop(1, '#e4c68d');
+        ctx.fillStyle = sand;
+        ctx.fillRect(0, shore, width, height - shore);
+
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255, 250, 235, 0.95)';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        for (let x = -20; x <= width + 20; x += 6) {
+          const y = shore + Math.sin(x * 0.02 + t * 0.0007) * 4;
+          if (x === -20) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.28)';
+        for (let i = 0; i < 26; i += 1) {
+          const x = ((i * 173 + 11) % 1000) / 1000 * width;
+          const y = shore + 16 + ((i * 71) % 100) / 100 * (height - shore - 18);
+          ctx.beginPath();
+          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      };
+
+      const draw = (now) => {
+        const t = now - startTime;
+        const sky = ctx.createLinearGradient(0, 0, 0, height * 0.62);
+        sky.addColorStop(0, '#8fd0f5');
+        sky.addColorStop(1, '#f8e0b0');
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, width, height);
+
+        drawSun(t);
+        clouds.forEach((cloud) => drawCloud(cloud, t));
+        drawOcean(t);
+        drawSand(t);
+      };
+
+      resize();
+      draw(0);
+
+      if (!reduceMotion) {
+        const loop = (now) => {
+          draw(now);
+          requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+      }
+
+      window.addEventListener('resize', () => {
+        resize();
+        draw(performance.now());
+      });
+    })();
+  </script>
+</body>
+</html>
